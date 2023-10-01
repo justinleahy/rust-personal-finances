@@ -1,0 +1,14 @@
+{
+    "name": "rust-personal-finance-ui",
+    "type": "module",
+    "version": "0.0.1",
+    "description": "Rust Personal Finance Frontend",
+    "dependencies": {
+
+    },
+    "devDependencies": {
+
+    },
+    "author": "Justin Leahy",
+    "license": "MIT"
+}
