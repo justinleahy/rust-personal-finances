@@ -24,3 +24,7 @@ Different kinds of accounts like Roth IRA, 401(k), Roth 401(k), etc.
 I want estimate capabilities for things like taxes and growth charts. Kind of like how ProjectionLabs works but more specific to my data and use cases.
 
 This program will have statistical analysis tools. I want to be able to understand all aspects of my financial situation.
+
+## Issues
+
+If there are any mathematical calucation discrepencies please submit an issue because I want this to work 100% of the time.
