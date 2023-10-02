@@ -18,3 +18,9 @@ Loans and debt. Credit cards fall in this phase.
 Stock Portfolio, this will be a challenge espesically if I want to include API usage to get a stocks current price. Probably will put this under it's own dashboard, separate from the rest of the program. Will need to incluce these in the total networth calculation however.
 
 Different kinds of accounts like Roth IRA, 401(k), Roth 401(k), etc.
+
+## Other
+
+I want estimate capabilities for things like taxes and growth charts. Kind of like how ProjectionLabs works but more specific to my data and use cases.
+
+This program will have statistical analysis tools. I want to be able to understand all aspects of my financial situation.
