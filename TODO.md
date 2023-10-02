@@ -1,4 +1,11 @@
-# Ideas
+# TODO
+
+## To-do List
+
+- [ ] In the schema diagram, change Account type to enum
+- [ ] In the schema diagram, add Compound Interest Units enum
+
+## Ideas
 
 - Database design document
 - Store numbers using scientific notation. This way there should be no rounding concerns. (Two signed int, one unsigned int). One signed int as the main integer, one unsigned int as the decimal, the last signed int as the exponent.
