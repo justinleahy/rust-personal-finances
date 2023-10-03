@@ -7,6 +7,35 @@ use super::reference::{PG_HOST, PG_ROOT_DB, PG_ROOT_USER, PG_ROOT_PASSWORD, PG_A
 
 pub type Db = Pool<Postgres>;
 
+pub async fn init_db() -> Result<Db, sqlx::Error> {
+    // Create the database with PG_ROOT (dev only)
+    {
+        let root_db = new_db_pool(PG_HOST, PG_ROOT_DB, PG_ROOT_USER, PG_ROOT_PASSWORD, 1).await?;
+        pexec(&root_db, SQL_RECREATE).await?;
+    }
+
+    // Run the app database SQL files
+    let app_db = new_db_pool(PG_HOST, PG_APP_DB, PG_APP_USER, PG_APP_PASSWORD, 1).await?;
+    let mut paths: Vec<PathBuf> = fs::read_dir(SQL_DIR)?
+        .into_iter()
+        .filter_map(|e| e.ok().map(|e| e.path()))
+        .collect();
+    
+    paths.sort();
+
+    // Execute each file
+    for path in paths {
+        if let Some(path) = path.to_str() {
+            if path.ends_with(".sql") && path != SQL_RECREATE {
+                pexec(&app_db, &path).await?;
+            }
+        }
+    }
+
+    // Returning the database
+    new_db_pool(PG_HOST, PG_APP_DB, PG_APP_USER, PG_APP_PASSWORD, PG_APP_MAX_CONNECTIONS).await
+}
+
 async fn new_db_pool(host: &str, db: &str, user: &str, password: &str, max_connections: u32) -> Result<Db, sqlx::Error> {
     let con_string = format!("postgres://{}:{}@{}/{}", user, password, host, db);
     PgPoolOptions::new()
