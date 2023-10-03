@@ -15,3 +15,23 @@ async fn new_db_pool(host: &str, db: &str, user: &str, password: &str, max_conne
         .connect(&con_string)
         .await
 }
+
+async fn pexec(db: &Db, file: &str) -> Result<(), sqlx::Error> {
+    // Read the file
+    let content = fs::read_to_string(file).map_err(|ex| {
+        println!("Error reading {} (cause: {:?}", file, ex);
+        ex
+    })?;
+
+    // TODO: Make split more SQL proof
+    let sqls: Vec<&str> = content.split(";").collect();
+
+    for sql in sqls {
+        match sqlx::query(&sql).execute(db).await {
+            Ok(_) => (),
+            Err(ex) => println!("WARNING - pexec - Sql file '{}' FAILED cause: {}", file, ex),
+        }
+    }
+
+    Ok(())
+}
