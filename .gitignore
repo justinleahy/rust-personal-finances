@@ -22,3 +22,6 @@ database/
 # Draw.io extra files
 .$personal-finance.drawio.bkp
 .$personal-finance.drawio.dtmp
+
+# Personal config
+backend/src/model/reference.rs
