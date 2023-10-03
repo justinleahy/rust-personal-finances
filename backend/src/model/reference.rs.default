@@ -1,0 +1,15 @@
+// Root DB
+pub const PG_HOST: &str = "";
+pub const PG_ROOT_DB: &str = "";
+pub const PG_ROOT_USER: &str = "";
+pub const PG_ROOT_PASSWORD: &str = "";
+
+// App DB
+pub const PG_APP_DB: &str = "finance_db";
+pub const PG_APP_USER: &str = "finance_user";
+pub const PG_APP_PASSWORD: &str = "finance_pwd";
+pub const PG_APP_MAX_CON: u32 = 5;
+
+// SQL Files
+pub const SQL_DIR: &str = "sql\\";
+pub const SQL_RECREATE: &str = "sql\\00-recreate-db.sql";
