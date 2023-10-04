@@ -1,5 +1,5 @@
--- User table
-CREATE TABLE user {
+-- uuid_generate_v4 function
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     id SERIAL PRIMARY KEY,
     first_name text NOT NULL,
     last_name text NOT NULL,
