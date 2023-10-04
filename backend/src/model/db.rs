@@ -64,3 +64,7 @@ async fn pexec(db: &Db, file: &str) -> Result<(), sqlx::Error> {
 
     Ok(())
 }
+
+#[cfg(test)]
+#[path = "..\\_tests\\model_db.rs"]
+mod tests;
