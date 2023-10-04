@@ -1,2 +1,2 @@
 -- Dev seed
-INSERT INTO user (first_name, last_name, user_name) VALUES ("Justin", "Leahy", "justinleahy")
+INSERT INTO users (first_name, last_name, username) VALUES ('Justin', 'Leahy', 'justinleahy');
