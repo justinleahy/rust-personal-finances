@@ -24,6 +24,41 @@ pub struct UserPatch {
 
 // endregion: Users type
 
+// region: Account type
+
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[sqlx(type_name = "account_types")]
+#[sqlx(rename_all = "lowercase")]
+pub enum AccountTypes {
+    Checking,
+    Savings
+}
+
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[sqlx(type_name = "interest_frequency_units")]
+#[sqlx(rename_all = "lowercase")]
+pub enum InterestFrequencyUnits {
+    Day,
+    Week,
+    Month,
+    Year
+}
+
+#[derive(sqlx::FromRow, Debug, Clone)]
+pub struct Account {
+    pub id: Uuid,
+    pub user_id: Uuid,
+    pub account_type: AccountTypes,
+    pub nickname: String,
+    pub interest_integer: i64,
+    pub interest_decimal: i64,
+    pub interest_exponent: i32,
+    pub interest_frequency: i32,
+    pub interest_frequency_unit: InterestFrequencyUnits
+}
+
+// endregion: Account type
+
 // endregion: Finance types
 
 // region: Finance MACs
