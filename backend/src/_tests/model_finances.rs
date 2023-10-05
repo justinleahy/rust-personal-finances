@@ -49,3 +49,28 @@ async fn model_finances_accountmac_list() -> Result<(), Box<dyn std::error::Erro
     Ok(())
 }
 
+#[tokio::test]
+async fn model_finances_accountmac_get() -> Result<(), Box<dyn std::error::Error>> {
+    // Fixture
+    let db = init_db().await?;
+
+    let id = uuid!("00000000-0000-0000-0000-000000000001");
+
+    // Action
+    let account = AccountMac::get(&db, id).await?;
+
+    // Check
+    let user_id = uuid!("00000000-0000-0000-0000-000000000000");
+
+    assert_eq!(id, account.id);
+    assert_eq!(user_id, account.user_id);
+    assert_eq!(AccountTypes::Checking, account.account_type);
+    assert_eq!("Main Checking", account.nickname);
+    assert_eq!(1, account.interest_integer);
+    assert_eq!(0, account.interest_decimal);
+    assert_eq!(-3, account.interest_exponent);
+    assert_eq!(1, account.interest_frequency);
+    assert_eq!(InterestFrequencyUnits::Day, account.interest_frequency_unit);
+
+    Ok(())
+}
