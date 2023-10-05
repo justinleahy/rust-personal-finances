@@ -34,3 +34,18 @@ async fn model_finances_usermac_get() -> Result<(), Box<dyn std::error::Error>> 
 
     Ok(())
 }
+
+#[tokio::test]
+async fn model_finances_accountmac_list() -> Result<(), Box<dyn std::error::Error>> {
+    // Fixture
+    let db = init_db().await?;
+
+    // Action
+    let accounts = AccountMac::list(&db).await?;
+
+    // Check
+    assert_eq!(1, accounts.len());
+
+    Ok(())
+}
+
