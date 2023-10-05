@@ -92,6 +92,12 @@ impl UserMac {
 
 // endregion: User MAC
 
+// region: Account MAC
+
+pub struct AccountMac;
+
+// endregion: Account MAC
+
 // endregion: Finance MACs
 
 #[cfg(test)]
