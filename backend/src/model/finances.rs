@@ -39,3 +39,7 @@ impl UserMac {
 // endregion: User MAC
 
 // endregion: Finance MACs
+
+#[cfg(test)]
+#[path = "../_tests/model_finances.rs"]
+mod tests;
