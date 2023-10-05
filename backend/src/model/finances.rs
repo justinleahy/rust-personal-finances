@@ -25,6 +25,17 @@ pub struct User {
 
 pub struct UserMac;
 
+impl UserMac {
+    pub async fn list(db: &Db) -> Result<Vec<User>, model::Error> {
+        let sb = sqlb::select()
+            .table(USER_MAC_TABLE)
+            .columns(USER_MAC_COLUMNS);
+
+        let users = sb.fetch_all(db).await?;
+        
+        Ok(users)
+    }
+}
 // endregion: User MAC
 
 // endregion: Finance MACs
