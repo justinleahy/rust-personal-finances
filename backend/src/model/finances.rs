@@ -106,6 +106,17 @@ impl AccountMac {
 
         Ok(accounts)
     }
+
+    pub async fn get(db: &Db, id: Uuid) -> Result<Account, model::Error> {
+        let sb = sqlb::select()
+            .table(ACCOUNT_MAC_TABLE)
+            .columns(ACCOUNT_MAC_COLUMNS)
+            .and_where_eq("id", id);
+
+        let account = sb.fetch_one(db).await?;
+
+        Ok(account)
+    }
 }
 
 // endregion: Account MAC
