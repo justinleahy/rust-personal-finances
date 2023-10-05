@@ -42,7 +42,19 @@ impl UserMac {
         
         Ok(users)
     }
+
+    pub async fn get(db: &Db, id: Uuid) -> Result<User, model::Error> {
+        let sb = sqlb::select()
+            .table(USER_MAC_TABLE)
+            .columns(USER_MAC_COLUMNS)
+            .and_where_eq("id", id);
+
+        let user = sb.fetch_one(db).await?;
+
+        Ok(user)
+    }
 }
+
 // endregion: User MAC
 
 // endregion: Finance MACs
