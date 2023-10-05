@@ -13,7 +13,7 @@ CREATE TYPE account_types AS ENUM (
 );
 
 -- Compound Interest Unit enum
-CREATE TYPE compound_interest_units AS ENUM (
+CREATE TYPE interest_frequency_units AS ENUM (
     'day',
     'week',
     'month',
@@ -25,10 +25,10 @@ CREATE TABLE accounts (
     id uuid PRIMARY KEY,
     user_id uuid REFERENCES users(id),
     account_type account_types NOT NULL,
-    account_nickname text NOT NULL,
-    interest_whole INT8 NOT NULL,
+    nickname text NOT NULL,
+    interest_integer INT8 NOT NULL,
     interest_decimal INT8 NOT NULL,
-    interest_decimal_exponent INT8 NOT NULL,
-    compound_interest_value INT NOT NULL,
-    compound_interest_unit compound_interest_units NOT NULL
+    interest_exponent INT NOT NULL,
+    interest_frequency INT NOT NULL,
+    interest_frequency_unit interest_frequency_units NOT NULL
 );
