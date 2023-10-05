@@ -18,3 +18,13 @@ pub struct User {
 // endregion: Users type
 
 // endregion: Finance types
+
+// region: Finance MACs
+
+// region: User MAC
+
+pub struct UserMac;
+
+// endregion: User MAC
+
+// endregion: Finance MACs
