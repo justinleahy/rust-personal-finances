@@ -16,3 +16,21 @@ async fn model_finances_usermac_list() -> Result<(), Box<dyn std::error::Error>>
 
     Ok(())
 }
+
+#[tokio::test]
+async fn model_finances_usermac_get() -> Result<(), Box<dyn std::error::Error>> {
+    // Fixture
+    let db = init_db().await?;
+
+    let id = uuid!("00000000-0000-0000-0000-000000000000");
+
+    // Action
+    let user = UserMac::get(&db, id).await?;
+
+    assert_eq!(id, user.id);
+    assert_eq!("justinleahy", user.username);
+    assert_eq!("Justin", user.first_name);
+    assert_eq!("Leahy", user.last_name);
+
+    Ok(())
+}
