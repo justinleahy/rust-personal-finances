@@ -26,9 +26,33 @@ CREATE TABLE accounts (
     user_id uuid REFERENCES users(id),
     account_type account_types NOT NULL,
     nickname text NOT NULL,
-    interest_integer INT8 NOT NULL,
+    interest_integer INT NOT NULL,
     interest_decimal INT8 NOT NULL,
     interest_exponent INT NOT NULL,
     interest_frequency INT NOT NULL,
     interest_frequency_unit interest_frequency_units NOT NULL
+);
+
+CREATE TYPE transaction_types AS ENUM (
+    'deposit',
+    'withdraw',
+    'expense'
+);
+
+CREATE TYPE transaction_categories AS ENUM (
+    'income',
+    'dividend'
+);
+
+-- Transaction table
+CREATE TABLE transactions (
+    id uuid PRIMARY KEY,
+    account_id uuid REFERENCES accounts(id),
+    transaction_date date not null,
+    transaction_type transaction_types not null,
+    category transaction_categories not null,
+    transaction_integer INT NOT NULL,
+    transaction_decimal INT8 NOT NULL,
+    transaction_exponent INT NOT NULL,
+    comment text
 );
