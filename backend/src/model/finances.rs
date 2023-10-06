@@ -1,3 +1,4 @@
+use sqlx::types::time::Date;
 use uuid::{uuid, Uuid};
 use sqlb::{Fields, HasFields, SqlBuilder};
 use super::{db::Db, reference::{USER_MAC_TABLE, USER_MAC_COLUMNS, ACCOUNT_MAC_TABLE, ACCOUNT_MAC_COLUMNS}};
@@ -58,6 +59,40 @@ pub struct Account {
 }
 
 // endregion: Account type
+
+// region: Transaction type
+
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[sqlx(type_name = "transaction_types")]
+#[sqlx(rename_all = "lowercase")]
+pub enum TransactionTypes {
+    Deposit,
+    Withdraw,
+    Expense
+}
+
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[sqlx(type_name = "transaction_categories")]
+#[sqlx(rename_all = "lowercase")]
+pub enum TransactionCategories {
+    Income,
+    Dividend
+}
+
+#[derive(sqlx::FromRow, Debug, Clone)]
+pub struct Transaction {
+    pub id: Uuid,
+    pub account_id: Uuid,
+    pub transaction_date: Date,
+    pub transaction_type: TransactionTypes,
+    pub category: TransactionCategories,
+    pub transaction_integer: i32,
+    pub transaction_decimal: i64,
+    pub transaction_exponent: i32,
+    pub comment: String
+}
+
+// endregion: Transaction type
 
 // endregion: Finance types
 
