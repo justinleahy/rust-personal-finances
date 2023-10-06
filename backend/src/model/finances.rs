@@ -1,7 +1,7 @@
 use sqlx::types::time::Date;
 use uuid::{uuid, Uuid};
 use sqlb::{Fields, HasFields, SqlBuilder};
-use super::{db::Db, reference::{USER_MAC_TABLE, USER_MAC_COLUMNS, ACCOUNT_MAC_TABLE, ACCOUNT_MAC_COLUMNS}};
+use super::{db::Db, reference::{USER_MAC_TABLE, USER_MAC_COLUMNS, ACCOUNT_MAC_TABLE, ACCOUNT_MAC_COLUMNS, TRANSACTION_MAC_TABLE, TRANSACTION_MAC_COLUMNS}};
 use crate::model;
 
 // region: Finance types
@@ -51,7 +51,7 @@ pub struct Account {
     pub user_id: Uuid,
     pub account_type: AccountTypes,
     pub nickname: String,
-    pub interest_integer: i64,
+    pub interest_integer: i32,
     pub interest_decimal: i64,
     pub interest_exponent: i32,
     pub interest_frequency: i32,
@@ -161,6 +161,15 @@ impl AccountMac {
 pub struct TransactionMac;
 
 impl TransactionMac {
+    pub async fn list(db: &Db) -> Result<Vec<Transaction>, model::Error> {
+        let sb = sqlb::select()
+            .table(TRANSACTION_MAC_TABLE)
+            .columns(TRANSACTION_MAC_COLUMNS);
+    
+        let transactions = sb.fetch_all(db).await?;
+
+        Ok(transactions)
+    }
 }
 
 // endregion: Transaction MAC
