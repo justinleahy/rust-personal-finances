@@ -13,3 +13,15 @@ pub const PG_APP_MAX_CON: u32 = 5;
 // SQL Files
 pub const SQL_DIR: &str = "sql\\";
 pub const SQL_RECREATE: &str = "sql\\00-recreate-db.sql";
+
+// User MAC
+pub const USER_MAC_TABLE: &'static str = "users";
+pub const USER_MAC_COLUMNS: &'static [&'static str] = &["id", "username", "first_name", "last_name"];
+
+// Account MAC
+pub const ACCOUNT_MAC_TABLE: &'static str = "accounts";
+pub const ACCOUNT_MAC_COLUMNS: &'static [&'static str] = &["id", "user_id", "account_type", "nickname", "interest_integer", "interest_decimal", "interest_exponent", "interest_frequency", "interest_frequency_unit"];
+
+// Transaction MAC
+pub const TRANSACTION_MAC_TABLE: &'static str = "transactions";
+pub const TRANSACTION_MAC_COLUMNS: &'static [&'static str] = &["id", "account_id", "transaction_date", "transaction_type", "category", "transaction_integer", "transaction_decimal", "transaction_exponent", "comment"];
