@@ -156,6 +156,15 @@ impl AccountMac {
 
 // endregion: Account MAC
 
+// region: Transaction MAC
+
+pub struct TransactionMac;
+
+impl TransactionMac {
+}
+
+// endregion: Transaction MAC
+
 // endregion: Finance MACs
 
 #[cfg(test)]
