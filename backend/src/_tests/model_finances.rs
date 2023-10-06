@@ -1,7 +1,8 @@
 use std::ptr::null;
 use uuid::uuid;
 use crate::model::db::init_db;
-use crate::model::finances::{UserMac, AccountMac, AccountTypes, InterestFrequencyUnits};
+use crate::model::finances::{UserMac, AccountMac, TransactionMac};
+use crate::model::finances::{AccountTypes, InterestFrequencyUnits};
 
 #[tokio::test]
 async fn model_finances_usermac_list() -> Result<(), Box<dyn std::error::Error>> {
@@ -71,6 +72,17 @@ async fn model_finances_accountmac_get() -> Result<(), Box<dyn std::error::Error
     assert_eq!(-3, account.interest_exponent);
     assert_eq!(1, account.interest_frequency);
     assert_eq!(InterestFrequencyUnits::Day, account.interest_frequency_unit);
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn model_finances_transactionmac_list() -> Result<(), Box<dyn std::error::Error>> {
+    let db = init_db().await?;
+
+    let transactions = TransactionMac::list(&db).await?;
+    
+    assert_eq!(1, transactions.len());
 
     Ok(())
 }
