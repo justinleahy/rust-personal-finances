@@ -170,6 +170,17 @@ impl TransactionMac {
 
         Ok(transactions)
     }
+
+    pub async fn get(db: &Db, id: Uuid) -> Result<Transaction, model::Error> {
+        let sb = sqlb::select()
+            .table(TRANSACTION_MAC_TABLE)
+            .columns(TRANSACTION_MAC_COLUMNS)
+            .and_where_eq("id", id);
+
+        let transaction = sb.fetch_one(db).await?;
+
+        Ok(transaction)
+    }
 }
 
 // endregion: Transaction MAC
