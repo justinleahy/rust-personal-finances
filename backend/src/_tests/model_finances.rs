@@ -163,8 +163,8 @@ async fn model_finances_transactionmac_get() -> Result<(), Box<dyn std::error::E
     assert_eq!(id, transaction.id);
     assert_eq!(account_id, transaction.account_id);
     assert_eq!(transaction_date, transaction.transaction_date);
-    assert_eq!(TransactionTypes::Deposit, transaction.transaction_type);
-    assert_eq!(TransactionCategories::Income, transaction.category);
+    assert_eq!(TransactionTypes::Transfer, transaction.transaction_type);
+    assert_eq!(TransactionCategories::Transfer, transaction.category);
     assert_eq!(8, transaction.transaction_integer);
     assert_eq!(9966, transaction.transaction_decimal);
     assert_eq!(2, transaction.transaction_exponent);

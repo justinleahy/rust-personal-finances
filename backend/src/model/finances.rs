@@ -113,7 +113,8 @@ sqlb::bindable!(TransactionTypes);
 #[sqlx(rename_all = "lowercase")]
 pub enum TransactionCategories {
     Income,
-    Dividend
+    Dividend,
+    Transfer
 }
 sqlb::bindable!(TransactionCategories);
 

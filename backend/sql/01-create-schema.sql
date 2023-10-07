@@ -42,7 +42,8 @@ CREATE TYPE transaction_types AS ENUM (
 
 CREATE TYPE transaction_categories AS ENUM (
     'income',
-    'dividend'
+    'dividend',
+    'transfer'
 );
 
 -- Transaction table
