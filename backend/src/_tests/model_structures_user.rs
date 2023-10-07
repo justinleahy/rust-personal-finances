@@ -73,6 +73,7 @@ async fn usermac_update() -> Result<(), Box<dyn std::error::Error>> {
     let user_updated = UserMac::update(&db, id, user_data_fx).await?;
 
     // Check
+    assert_eq!(user_original.id, user_updated.id);
     assert_eq!("jjleahy", user_updated.username);
     assert_eq!(user_original.first_name, user_updated.first_name);
     assert_eq!(user_original.last_name, user_updated.last_name);
