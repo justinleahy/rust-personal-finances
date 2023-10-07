@@ -141,7 +141,7 @@ async fn model_finances_transactionmac_list() -> Result<(), Box<dyn std::error::
     let transactions = TransactionMac::list(&db).await?;
     
     // Check
-    assert_eq!(1, transactions.len());
+    assert_eq!(2, transactions.len());
 
     Ok(())
 }
@@ -168,7 +168,7 @@ async fn model_finances_transactionmac_get() -> Result<(), Box<dyn std::error::E
     assert_eq!(8, transaction.transaction_integer);
     assert_eq!(9966, transaction.transaction_decimal);
     assert_eq!(2, transaction.transaction_exponent);
-    assert_eq!("Webull Deposit", transaction.comment);
+    assert_eq!("Webull Transfer", transaction.comment);
 
     Ok(())
 }
