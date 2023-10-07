@@ -1,4 +1,4 @@
-use time::Date;
+use time::OffsetDateTime;
 use uuid::{uuid, Uuid};
 use sqlb::{Fields, HasFields, SqlBuilder};
 use super::super::db::Db;
@@ -31,13 +31,26 @@ sqlb::bindable!(TransactionCategories);
 pub struct Transaction {
     pub id: Uuid,
     pub account_id: Uuid,
-    pub transaction_date: Date,
+    pub transaction_date: OffsetDateTime,
     pub transaction_type: TransactionTypes,
     pub category: TransactionCategories,
     pub transaction_integer: i32,
     pub transaction_decimal: i64,
     pub transaction_exponent: i32,
     pub comment: String
+}
+
+#[derive(sqlb::Fields, Clone)]
+struct TransactionCreate {
+    id: Uuid,
+    account_id: Option<Uuid>,
+    transaction_date: Option<OffsetDateTime>,
+    transaction_type: Option<TransactionTypes>,
+    category: Option<TransactionCategories>,
+    transaction_integer: Option<i32>,
+    transaction_decimal: Option<i64>,
+    transaction_exponent: Option<i32>,
+    comment: Option<String>
 }
 
 pub struct TransactionMac;

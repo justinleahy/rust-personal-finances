@@ -1,6 +1,7 @@
 use std::ptr::null;
+use time::macros::datetime;
 use uuid::uuid;
-use time::Date;
+use time::OffsetDateTime;
 use crate::model::db::init_db;
 use crate::model::structures::transaction::{TransactionMac, TransactionTypes, TransactionCategories};
 
@@ -30,7 +31,7 @@ async fn transactionmac_get() -> Result<(), Box<dyn std::error::Error>> {
 
     // Check
     let account_id = uuid!("00000000-0000-0000-0000-000000000001");
-    let transaction_date = Date::from_calendar_date(2023, time::Month::October, 6)?;
+    let transaction_date = datetime!(2023-10-06 00:00:00 +00:00:00);
 
     assert_eq!(id, transaction.id);
     assert_eq!(account_id, transaction.account_id);

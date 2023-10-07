@@ -51,7 +51,7 @@ CREATE TYPE transaction_categories AS ENUM (
 CREATE TABLE transactions (
     id uuid PRIMARY KEY,
     account_id uuid REFERENCES accounts(id),
-    transaction_date date not null,
+    transaction_date TIMESTAMPTZ not null,
     transaction_type transaction_types not null,
     category transaction_categories not null,
     transaction_integer INT NOT NULL,
