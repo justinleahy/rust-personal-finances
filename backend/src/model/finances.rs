@@ -182,6 +182,18 @@ impl UserMac {
 
         Ok(user)
     }
+
+    pub async fn update(db: &Db, id: Uuid, data: UserPatch) -> Result<User, model::Error> {
+        let sb = sqlb::update()
+            .table(USER_MAC_TABLE)
+            .data(data.not_none_fields())
+            .and_where_eq("id", id)
+            .returning(USER_MAC_COLUMNS);
+
+        let user = sb.fetch_one(db).await?;
+
+        Ok(user)
+    }
 }
 
 // endregion: User MAC
