@@ -36,7 +36,8 @@ CREATE TABLE accounts (
 CREATE TYPE transaction_types AS ENUM (
     'deposit',
     'withdraw',
-    'expense'
+    'expense',
+    'transfer'
 );
 
 CREATE TYPE transaction_categories AS ENUM (
