@@ -68,6 +68,29 @@ pub struct TransactionPatch {
 pub struct TransactionMac;
 
 impl TransactionMac {
+    pub async fn create(db: &Db, data: TransactionPatch) -> Result<Transaction, model::Error> {
+        let new_transaction = TransactionCreate {
+            id: Uuid::new_v4(),
+            account_id: data.account_id,
+            transaction_date: data.transaction_date,
+            transaction_type: data.transaction_type,
+            category: data.category,
+            transaction_integer: data.transaction_integer,
+            transaction_decimal: data.transaction_decimal,
+            transaction_exponent: data.transaction_exponent,
+            comment: data.comment
+        };
+
+        let sb = sqlb::insert()
+            .table(TRANSACTION_MAC_TABLE)
+            .data(new_transaction.not_none_fields())
+            .returning(TRANSACTION_MAC_COLUMNS);
+
+        let transaction = sb.fetch_one(db).await?;
+
+        Ok(transaction)
+    }
+
     pub async fn list(db: &Db) -> Result<Vec<Transaction>, model::Error> {
         let sb = sqlb::select()
             .table(TRANSACTION_MAC_TABLE)
