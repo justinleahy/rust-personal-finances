@@ -114,6 +114,8 @@ pub struct Transaction {
     pub comment: String
 }
 
+
+
 // endregion: Transaction type
 
 // endregion: Finance types
@@ -125,6 +127,24 @@ pub struct Transaction {
 pub struct UserMac;
 
 impl UserMac {
+    pub async fn create(db: &Db, data: UserPatch) -> Result<User, model::Error> {
+        let new_user = UserCreate {
+            id: Some(Uuid::new_v4()),
+            first_name: data.first_name,
+            last_name: data.last_name,
+            username: data.username
+        };
+
+        let sb = sqlb::insert()
+            .table(USER_MAC_TABLE)
+            .data(new_user.not_none_fields())
+            .returning(USER_MAC_COLUMNS);
+
+        let user = sb.fetch_one(db).await?;
+
+        Ok(user)
+    }
+
     pub async fn list(db: &Db) -> Result<Vec<User>, model::Error> {
         let sb = sqlb::select()
             .table(USER_MAC_TABLE)
