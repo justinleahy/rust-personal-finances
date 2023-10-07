@@ -3,7 +3,29 @@ use uuid::uuid;
 use time::Date;
 use crate::model::db::init_db;
 use crate::model::finances::{UserMac, AccountMac, TransactionMac};
+use crate::model::finances::{UserPatch, AccountPatch};
 use crate::model::finances::{AccountTypes, InterestFrequencyUnits, TransactionTypes, TransactionCategories};
+
+#[tokio::test]
+async fn model_finances_usermac_create() -> Result<(), Box<dyn std::error::Error>> {
+    // Fixture
+    let db = init_db().await?;
+    let user_fx = UserPatch {
+        first_name: Some("John".to_string()),
+        last_name: Some("Leahy".to_string()),
+        username: Some("johnleahy".to_string())
+    };
+    
+    // Action
+    let user_created = UserMac::create(&db, user_fx.clone()).await?;
+
+    // Check
+    assert_eq!(user_created.username, "johnleahy");
+    assert_eq!(user_created.first_name, "John");
+    assert_eq!(user_created.last_name, "Leahy");
+
+    Ok(())
+}
 
 #[tokio::test]
 async fn model_finances_usermac_list() -> Result<(), Box<dyn std::error::Error>> {
