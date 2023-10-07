@@ -60,6 +60,26 @@ async fn model_finances_usermac_get() -> Result<(), Box<dyn std::error::Error>> 
 }
 
 #[tokio::test]
+async fn model_finances_usermac_update() -> Result<(), Box<dyn std::error::Error>> {
+    // Fixture
+    let db = init_db().await?;
+    let id = uuid!("00000000-0000-0000-0000-000000000000");
+    let user_data_fx: UserPatch = UserPatch {
+        username: Some("jjleahy".to_string()),
+        first_name: None,
+        last_name: None
+    };
+
+    // Action
+    let user_updated = UserMac::update(&db, id, user_data_fx).await?;
+
+    // Check
+    assert_eq!("jjleahy", user_updated.username);
+
+    Ok(())
+}
+
+#[tokio::test]
 async fn model_finances_accountmac_create() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
