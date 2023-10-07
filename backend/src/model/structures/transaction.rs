@@ -53,6 +53,18 @@ struct TransactionCreate {
     comment: Option<String>
 }
 
+#[derive(sqlb::Fields, Clone)]
+pub struct TransactionPatch {
+    account_id: Option<Uuid>,
+    transaction_date: Option<OffsetDateTime>,
+    transaction_type: Option<TransactionTypes>,
+    category: Option<TransactionCategories>,
+    transaction_integer: Option<i32>,
+    transaction_decimal: Option<i64>,
+    transaction_exponent: Option<i32>,
+    comment: Option<String>
+}
+
 pub struct TransactionMac;
 
 impl TransactionMac {
