@@ -109,6 +109,18 @@ impl AccountMac {
 
         Ok(account)
     }
+
+    pub async fn update(db: &Db, id: Uuid, data: AccountPatch) -> Result<Account, model::Error> {
+        let sb = sqlb::update()
+            .table(ACCOUNT_MAC_TABLE)
+            .data(data.not_none_fields())
+            .and_where_eq("id", id)
+            .returning(ACCOUNT_MAC_COLUMNS);
+
+        let user = sb.fetch_one(db).await?;
+        
+        Ok(user)
+    }
 }
 
 #[cfg(test)]
