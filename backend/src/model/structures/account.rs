@@ -1,4 +1,3 @@
-use time::Date;
 use uuid::{uuid, Uuid};
 use sqlb::{Fields, HasFields, SqlBuilder};
 use super::super::db::Db;
@@ -40,7 +39,7 @@ pub struct Account {
 
 #[derive(sqlb::Fields, Clone)]
 struct AccountCreate {
-    id: Option<Uuid>,
+    id: Uuid,
     user_id: Option<Uuid>,
     account_type: Option<AccountTypes>,
     nickname: Option<String>,
@@ -68,7 +67,7 @@ pub struct AccountMac;
 impl AccountMac {
     pub async fn create(db: &Db, data: AccountPatch) -> Result<Account, model::Error> {
         let new_account = AccountCreate {
-            id: Some(Uuid::new_v4()),
+            id: Uuid::new_v4(),
             user_id: data.user_id,
             account_type: data.account_type,
             nickname: data.nickname,
