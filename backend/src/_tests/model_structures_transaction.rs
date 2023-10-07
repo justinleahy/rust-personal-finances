@@ -5,7 +5,7 @@ use crate::model::db::init_db;
 use crate::model::structures::transaction::{TransactionMac, TransactionTypes, TransactionCategories};
 
 #[tokio::test]
-async fn model_finances_transactionmac_list() -> Result<(), Box<dyn std::error::Error>> {
+async fn transactionmac_list() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
 
@@ -19,7 +19,7 @@ async fn model_finances_transactionmac_list() -> Result<(), Box<dyn std::error::
 }
 
 #[tokio::test]
-async fn model_finances_transactionmac_get() -> Result<(), Box<dyn std::error::Error>> {
+async fn transactionmac_get() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
 

@@ -5,7 +5,7 @@ use crate::model::db::init_db;
 use crate::model::structures::user::{UserMac, UserPatch};
 
 #[tokio::test]
-async fn model_finances_usermac_create() -> Result<(), Box<dyn std::error::Error>> {
+async fn usermac_create() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
     let user_fx = UserPatch {
@@ -26,7 +26,7 @@ async fn model_finances_usermac_create() -> Result<(), Box<dyn std::error::Error
 }
 
 #[tokio::test]
-async fn model_finances_usermac_list() -> Result<(), Box<dyn std::error::Error>> {
+async fn usermac_list() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
     
@@ -40,7 +40,7 @@ async fn model_finances_usermac_list() -> Result<(), Box<dyn std::error::Error>>
 }
 
 #[tokio::test]
-async fn model_finances_usermac_get() -> Result<(), Box<dyn std::error::Error>> {
+async fn usermac_get() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
 
@@ -58,7 +58,7 @@ async fn model_finances_usermac_get() -> Result<(), Box<dyn std::error::Error>> 
 }
 
 #[tokio::test]
-async fn model_finances_usermac_update() -> Result<(), Box<dyn std::error::Error>> {
+async fn usermac_update() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
     let id = uuid!("00000000-0000-0000-0000-000000000000");

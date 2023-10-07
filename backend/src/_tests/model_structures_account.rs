@@ -4,7 +4,7 @@ use crate::model::db::init_db;
 use crate::model::structures::account::{AccountTypes, InterestFrequencyUnits, AccountPatch, AccountMac};
 
 #[tokio::test]
-async fn model_finances_accountmac_create() -> Result<(), Box<dyn std::error::Error>> {
+async fn accountmac_create() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
 
@@ -37,7 +37,7 @@ async fn model_finances_accountmac_create() -> Result<(), Box<dyn std::error::Er
 }
 
 #[tokio::test]
-async fn model_finances_accountmac_list() -> Result<(), Box<dyn std::error::Error>> {
+async fn accountmac_list() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
 
@@ -51,7 +51,7 @@ async fn model_finances_accountmac_list() -> Result<(), Box<dyn std::error::Erro
 }
 
 #[tokio::test]
-async fn model_finances_accountmac_get() -> Result<(), Box<dyn std::error::Error>> {
+async fn accountmac_get() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
 
