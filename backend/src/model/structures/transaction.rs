@@ -111,6 +111,17 @@ impl TransactionMac {
 
         Ok(transaction)
     }
+
+    pub async fn update(db: &Db, id: Uuid, data: TransactionPatch) -> Result<Transaction, model::Error> {
+        let sb = sqlb::update()
+            .table(TRANSACTION_MAC_TABLE)
+            .data(data.not_none_fields())
+            .returning(TRANSACTION_MAC_COLUMNS);
+
+        let transaction = sb.fetch_one(db).await?;
+
+        Ok(transaction)
+    }
 }
 
 #[cfg(test)]
