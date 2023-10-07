@@ -1,11 +1,12 @@
 use time::OffsetDateTime;
 use uuid::{uuid, Uuid};
+use serde_derive::{ Serialize, Deserialize };
 use sqlb::{Fields, HasFields, SqlBuilder};
 use super::super::db::Db;
 use super::super::reference::{TRANSACTION_MAC_TABLE, TRANSACTION_MAC_COLUMNS};
 use crate::model;
 
-#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[sqlx(type_name = "transaction_types")]
 #[sqlx(rename_all = "lowercase")]
 pub enum TransactionTypes {
@@ -16,7 +17,7 @@ pub enum TransactionTypes {
 }
 sqlb::bindable!(TransactionTypes);
 
-#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[sqlx(type_name = "transaction_categories")]
 #[sqlx(rename_all = "lowercase")]
 pub enum TransactionCategories {
@@ -27,7 +28,7 @@ pub enum TransactionCategories {
 }
 sqlb::bindable!(TransactionCategories);
 
-#[derive(sqlx::FromRow, Debug, Clone)]
+#[derive(sqlx::FromRow, Debug, Clone, Serialize, Deserialize)]
 pub struct Transaction {
     pub id: Uuid,
     pub account_id: Uuid,
