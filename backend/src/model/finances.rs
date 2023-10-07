@@ -34,6 +34,7 @@ pub enum AccountTypes {
     Checking,
     Savings
 }
+sqlb::bindable!(AccountTypes);
 
 #[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
 #[sqlx(type_name = "interest_frequency_units")]
@@ -44,6 +45,7 @@ pub enum InterestFrequencyUnits {
     Month,
     Year
 }
+sqlb::bindable!(InterestFrequencyUnits);
 
 #[derive(sqlx::FromRow, Debug, Clone)]
 pub struct Account {
@@ -56,6 +58,18 @@ pub struct Account {
     pub interest_exponent: i32,
     pub interest_frequency: i32,
     pub interest_frequency_unit: InterestFrequencyUnits
+}
+
+#[derive(sqlb::Fields, Clone)]
+pub struct AccountPatch {
+    pub user_id: Option<Uuid>,
+    pub account_type: Option<AccountTypes>,
+    pub nickname: Option<String>,
+    pub interest_integer: Option<i32>,
+    pub interest_decimal: Option<i64>,
+    pub interest_exponent: Option<i32>,
+    pub interest_frequency: Option<i32>,
+    pub interest_frequency_unit: Option<InterestFrequencyUnits>
 }
 
 // endregion: Account type
