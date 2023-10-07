@@ -1,4 +1,3 @@
-use std::ptr::null;
 use uuid::uuid;
 use crate::model::db::init_db;
 use crate::model::structures::account::{AccountTypes, InterestFrequencyUnits, AccountPatch, AccountMac};

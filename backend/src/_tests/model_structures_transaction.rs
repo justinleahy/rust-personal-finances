@@ -1,4 +1,3 @@
-use std::ptr::null;
 use time::macros::datetime;
 use uuid::uuid;
 use time::OffsetDateTime;

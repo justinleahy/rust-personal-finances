@@ -1,6 +1,4 @@
-use std::ptr::null;
 use uuid::uuid;
-use time::Date;
 use crate::model::db::init_db;
 use crate::model::structures::user::{UserMac, UserPatch};
 
