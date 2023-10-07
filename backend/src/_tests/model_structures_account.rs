@@ -75,3 +75,37 @@ async fn accountmac_get() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+#[tokio::test]
+async fn accountmac_update() -> Result<(), Box<dyn std::error::Error>> {
+    // Fixture
+    let db = init_db().await?;
+    let id = uuid!("00000000-0000-0000-0000-000000000001");
+    let account_data_fx: AccountPatch = AccountPatch {
+        user_id: None,
+        account_type: None,
+        nickname: Some("Renamed Checking".to_string()),
+        interest_integer: None,
+        interest_decimal: None,
+        interest_exponent: None,
+        interest_frequency: None,
+        interest_frequency_unit: None
+    };
+
+    // Action
+    let account_original = AccountMac::get(&db, id).await?;
+    let account_updated = AccountMac::update(&db, id, account_data_fx).await?;
+
+    // Check
+    assert_eq!(account_original.id, account_updated.id);
+    assert_eq!(account_original.user_id, account_updated.user_id);
+    assert_eq!(account_original.account_type, account_updated.account_type);
+    assert_eq!("Renamed Checking", account_updated.nickname);
+    assert_eq!(account_original.interest_integer, account_updated.interest_integer);
+    assert_eq!(account_original.interest_decimal, account_updated.interest_decimal);
+    assert_eq!(account_original.interest_exponent, account_updated.interest_exponent);
+    assert_eq!(account_original.interest_frequency, account_updated.interest_frequency);
+    assert_eq!(account_original.interest_frequency_unit, account_updated.interest_frequency_unit);
+
+    Ok(())
+}
