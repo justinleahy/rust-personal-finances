@@ -7,6 +7,8 @@ mod structures;
 
 pub use db::Db;
 pub use db::init_db;
+pub use structures::Transaction;
+pub use structures::TransactionMac;
 
 #[derive(ThisError, Debug)]
 pub enum Error {
