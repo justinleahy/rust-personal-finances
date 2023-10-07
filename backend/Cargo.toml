@@ -17,3 +17,6 @@ time = "0.3.29"
 tokio = { version = "1.32.0", features = ["full"] }
 uuid = { version = "1.4.1", features = ["v4", "v7"] }
 warp = "0.3.6"
+
+[dev-dependencies]
+anyhow = "1.0.75"
