@@ -69,6 +69,19 @@ pub struct Account {
 }
 
 #[derive(sqlb::Fields, Clone)]
+struct AccountCreate {
+    id: Option<Uuid>,
+    user_id: Option<Uuid>,
+    account_type: Option<AccountTypes>,
+    nickname: Option<String>,
+    interest_integer: Option<i32>,
+    interest_decimal: Option<i64>,
+    interest_exponent: Option<i32>,
+    interest_frequency: Option<i32>,
+    interest_frequency_unit: Option<InterestFrequencyUnits>
+}
+
+#[derive(sqlb::Fields, Clone)]
 pub struct AccountPatch {
     pub user_id: Option<Uuid>,
     pub account_type: Option<AccountTypes>,
@@ -90,8 +103,10 @@ pub struct AccountPatch {
 pub enum TransactionTypes {
     Deposit,
     Withdraw,
-    Expense
+    Expense,
+    Transfer
 }
+sqlb::bindable!(TransactionTypes);
 
 #[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
 #[sqlx(type_name = "transaction_categories")]
@@ -100,6 +115,7 @@ pub enum TransactionCategories {
     Income,
     Dividend
 }
+sqlb::bindable!(TransactionCategories);
 
 #[derive(sqlx::FromRow, Debug, Clone)]
 pub struct Transaction {
