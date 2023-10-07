@@ -78,3 +78,25 @@ async fn transactionmac_get() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+#[tokio::test]
+async fn transactionmac_update() -> Result<(), Box<dyn std::error::Error>> {
+    // Fixture
+    let db = init_db().await?;
+    let id = uuid!("00000000-0000-0000-0000-000000000002");
+    let transaction_data_fx: TransactionPatch = TransactionPatch {
+        account_id: None,
+        transaction_date: None,
+        transaction_type: None,
+        category: None,
+        transaction_integer: Some(7),
+        transaction_decimal: None,
+        transaction_exponent: None,
+        comment: None
+    };
+
+    // Action
+    let transaction_original = TransactionMac::get(&db, id).await?;
+
+    Ok(())
+}
