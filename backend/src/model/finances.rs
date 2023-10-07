@@ -190,6 +190,29 @@ impl UserMac {
 pub struct AccountMac;
 
 impl AccountMac {
+    pub async fn create(db: &Db, data: AccountPatch) -> Result<Account, model::Error> {
+        let new_account = AccountCreate {
+            id: Some(Uuid::new_v4()),
+            user_id: data.user_id,
+            account_type: data.account_type,
+            nickname: data.nickname,
+            interest_integer: data.interest_integer,
+            interest_decimal: data.interest_decimal,
+            interest_exponent: data.interest_exponent,
+            interest_frequency: data.interest_frequency,
+            interest_frequency_unit: data.interest_frequency_unit
+        };
+
+        let sb = sqlb::insert()
+            .table(ACCOUNT_MAC_TABLE)
+            .data(new_account.not_none_fields())
+            .returning(ACCOUNT_MAC_COLUMNS);
+
+        let account = sb.fetch_one(db).await?;
+        
+        Ok(account)
+    }
+
     pub async fn list(db: &Db) -> Result<Vec<Account>, model::Error> {
         let sb = sqlb::select()
             .table(ACCOUNT_MAC_TABLE)
