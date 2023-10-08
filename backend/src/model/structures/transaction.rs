@@ -75,6 +75,17 @@ impl TransactionMac {
         Ok(transaction)
     }
 
+    pub async fn delete(db: &Db, id: Uuid) -> Result<Transaction, model::Error> {
+        let sb = sqlb::delete()
+            .table(Self::TABLE)
+            .returning(Self::COLUMNS)
+            .and_where_eq("id", id);
+
+        let transaction = sb.fetch_one(db).await?;
+
+        Ok(transaction)
+    }
+
     pub async fn list(db: &Db) -> Result<Vec<Transaction>, model::Error> {
         let sb = sqlb::select()
             .table(Self::TABLE)
