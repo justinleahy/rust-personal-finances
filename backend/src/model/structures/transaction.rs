@@ -43,19 +43,6 @@ pub struct Transaction {
 }
 
 #[derive(sqlb::Fields, Clone)]
-struct TransactionCreate {
-    id: Uuid,
-    account_id: Option<Uuid>,
-    transaction_date: Option<OffsetDateTime>,
-    transaction_type: Option<TransactionTypes>,
-    category: Option<TransactionCategories>,
-    amount: Option<f64>,
-    title: Option<String>,
-    vendor: Option<String>,
-    comment: Option<String>
-}
-
-#[derive(sqlb::Fields, Clone)]
 pub struct TransactionPatch {
     account_id: Option<Uuid>,
     transaction_date: Option<OffsetDateTime>,
