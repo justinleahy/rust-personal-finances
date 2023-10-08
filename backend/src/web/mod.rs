@@ -12,6 +12,7 @@ use serde_json::json;
 
 mod transaction;
 mod account;
+mod user;
 
 pub async fn start_web(web_folder: &str, web_port: u16, db: Arc<Db>) -> Result<(), Error> {
     // Validate web_folder
