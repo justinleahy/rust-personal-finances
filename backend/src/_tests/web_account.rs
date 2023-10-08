@@ -5,16 +5,18 @@ use std::str::from_utf8;
 use crate::init_db;
 use crate::model::Account;
 use crate::web::account::account_rest_filters;
+use crate::web::handle_rejection;
 use serde::Deserialize;
 use std::sync::Arc;
 use warp::hyper::{Response, body::Bytes};
+use warp::Filter;
 
 #[tokio::test]
 async fn account_list() -> Result<()> {
     // Fixture
     let db = init_db().await?;
     let db = Arc::new(db);
-    let account_apis = account_rest_filters("api", db.clone());
+    let account_apis = account_rest_filters("api", db.clone()).recover(handle_rejection);
 
     // Action
     let resp = warp::test::request()
