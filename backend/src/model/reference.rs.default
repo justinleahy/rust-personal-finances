@@ -9,7 +9,3 @@ pub const PG_APP_DB: &str = "finance_db";
 pub const PG_APP_USER: &str = "finance_user";
 pub const PG_APP_PASSWORD: &str = "finance_pwd";
 pub const PG_APP_MAX_CON: u32 = 5;
-
-// User MAC
-pub const USER_MAC_TABLE: &'static str = "users";
-pub const USER_MAC_COLUMNS: &'static [&'static str] = &["id", "username", "password_hash", "user_context", "first_name", "last_name"];
