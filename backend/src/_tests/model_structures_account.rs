@@ -1,5 +1,6 @@
 use uuid::uuid;
 use crate::model::db::init_db;
+use crate::model::structures::user::UserMac;
 use crate::model::structures::account::{AccountTypes, InterestFrequencyUnits, AccountPatch, AccountMac};
 
 #[tokio::test]
@@ -8,9 +9,10 @@ async fn accountmac_create() -> Result<(), Box<dyn std::error::Error>> {
     let db = init_db().await?;
 
     let user_id = uuid!("00000000-0000-0000-0000-000000000000");
+    let user = UserMac::get(&db, user_id).await?;
 
     let account_fx = AccountPatch {
-        user_id: Some(user_id),
+        user_id: Some(user.id),
         account_type: Some(AccountTypes::Savings),
         nickname: Some("Main Savings".to_string()),
         interest: Some(0.041624),
@@ -21,7 +23,7 @@ async fn accountmac_create() -> Result<(), Box<dyn std::error::Error>> {
     // Action
     let account_created = AccountMac::create(&db, account_fx.clone()).await?;
 
-    assert_eq!(user_id, account_created.user_id);
+    assert_eq!(user.id, account_created.user_id);
     assert_eq!(AccountTypes::Savings, account_created.account_type);
     assert_eq!("Main Savings", account_created.nickname);
     assert_eq!(0.041624, account_created.interest);
@@ -54,12 +56,12 @@ async fn accountmac_get() -> Result<(), Box<dyn std::error::Error>> {
 
     // Action
     let account = AccountMac::get(&db, id).await?;
+    let user = UserMac::get(&db, account.user_id).await?;
 
     // Check
-    let user_id = uuid!("00000000-0000-0000-0000-000000000000");
 
     assert_eq!(id, account.id);
-    assert_eq!(user_id, account.user_id);
+    assert_eq!(user.id, account.user_id);
     assert_eq!(AccountTypes::Checking, account.account_type);
     assert_eq!("Main Checking", account.nickname);
     assert_eq!(0.0009995, account.interest);
