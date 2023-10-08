@@ -61,19 +61,12 @@ pub struct AccountMac;
 
 impl AccountMac {
     pub async fn create(db: &Db, data: AccountPatch) -> Result<Account, model::Error> {
-        let new_account = AccountCreate {
-            id: Uuid::new_v4(),
-            user_id: data.user_id,
-            account_type: data.account_type,
-            nickname: data.nickname,
-            interest: data.interest,
-            interest_frequency: data.interest_frequency,
-            interest_frequency_unit: data.interest_frequency_unit
-        };
+        let mut fields = data.not_none_fields();
+        fields.push(("id", Uuid::new_v4()).into());
 
         let sb = sqlb::insert()
             .table(ACCOUNT_MAC_TABLE)
-            .data(new_account.not_none_fields())
+            .data(fields)
             .returning(ACCOUNT_MAC_COLUMNS);
 
         let account = sb.fetch_one(db).await?;
