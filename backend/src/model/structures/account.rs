@@ -35,7 +35,7 @@ pub struct Account {
     pub interest_frequency_unit: InterestFrequencyUnits
 }
 
-#[derive(sqlb::Fields, Clone)]
+#[derive(sqlb::Fields, Clone, Serialize, Deserialize)]
 pub struct AccountPatch {
     pub user_id: Option<Uuid>,
     pub account_type: Option<AccountTypes>,
