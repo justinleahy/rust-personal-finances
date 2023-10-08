@@ -13,7 +13,3 @@ pub const PG_APP_MAX_CON: u32 = 5;
 // User MAC
 pub const USER_MAC_TABLE: &'static str = "users";
 pub const USER_MAC_COLUMNS: &'static [&'static str] = &["id", "username", "password_hash", "user_context", "first_name", "last_name"];
-
-// Transaction MAC
-pub const TRANSACTION_MAC_TABLE: &'static str = "transactions";
-pub const TRANSACTION_MAC_COLUMNS: &'static [&'static str] = &["id", "account_id", "transaction_date", "transaction_type", "category", "amount", "title", "vendor", "comment"];

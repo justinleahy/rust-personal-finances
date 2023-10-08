@@ -3,7 +3,6 @@ use uuid::{uuid, Uuid};
 use serde_derive::{ Serialize, Deserialize };
 use sqlb::{Fields, HasFields, SqlBuilder};
 use super::super::db::Db;
-use super::super::reference::{TRANSACTION_MAC_TABLE, TRANSACTION_MAC_COLUMNS};
 use crate::model;
 
 #[derive(sqlx::Type, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -57,14 +56,19 @@ pub struct TransactionPatch {
 pub struct TransactionMac;
 
 impl TransactionMac {
+    const TABLE:&'static str = "transactions";
+    const COLUMNS: &'static [&'static str] = &["id", "account_id", "transaction_date", "transaction_type", "category", "amount", "title", "vendor", "comment"];
+}
+
+impl TransactionMac {
     pub async fn create(db: &Db, data: TransactionPatch) -> Result<Transaction, model::Error> {
         let mut fields = data.not_none_fields();
         fields.push(("id", Uuid::new_v4()).into());
 
         let sb = sqlb::insert()
-            .table(TRANSACTION_MAC_TABLE)
+            .table(Self::TABLE)
             .data(fields)
-            .returning(TRANSACTION_MAC_COLUMNS);
+            .returning(Self::COLUMNS);
 
         let transaction = sb.fetch_one(db).await?;
 
@@ -73,8 +77,8 @@ impl TransactionMac {
 
     pub async fn list(db: &Db) -> Result<Vec<Transaction>, model::Error> {
         let sb = sqlb::select()
-            .table(TRANSACTION_MAC_TABLE)
-            .columns(TRANSACTION_MAC_COLUMNS)
+            .table(Self::TABLE)
+            .columns(Self::COLUMNS)
             .order_by("!id");
     
         let transactions = sb.fetch_all(db).await?;
@@ -84,8 +88,8 @@ impl TransactionMac {
 
     pub async fn get(db: &Db, id: Uuid) -> Result<Transaction, model::Error> {
         let sb = sqlb::select()
-            .table(TRANSACTION_MAC_TABLE)
-            .columns(TRANSACTION_MAC_COLUMNS)
+            .table(Self::TABLE)
+            .columns(Self::COLUMNS)
             .and_where_eq("id", id);
 
         let transaction = sb.fetch_one(db).await?;
@@ -95,10 +99,10 @@ impl TransactionMac {
 
     pub async fn update(db: &Db, id: Uuid, data: TransactionPatch) -> Result<Transaction, model::Error> {
         let sb = sqlb::update()
-            .table(TRANSACTION_MAC_TABLE)
+            .table(Self::TABLE)
             .data(data.not_none_fields())
             .and_where_eq("id", id)
-            .returning(TRANSACTION_MAC_COLUMNS);
+            .returning(Self::COLUMNS);
 
         let transaction = sb.fetch_one(db).await?;
 
