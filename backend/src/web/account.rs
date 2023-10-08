@@ -28,3 +28,7 @@ async fn account_list(db: Arc<Db>) -> Result<Json, warp::Rejection> {
     let response = json!({ "data": accounts });
     Ok(warp::reply::json(&response))
 }
+
+#[cfg(test)]
+#[path = "../_tests/web_account.rs"]
+mod tests;
