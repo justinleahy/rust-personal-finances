@@ -95,7 +95,8 @@ impl TransactionMac {
     pub async fn list(db: &Db) -> Result<Vec<Transaction>, model::Error> {
         let sb = sqlb::select()
             .table(TRANSACTION_MAC_TABLE)
-            .columns(TRANSACTION_MAC_COLUMNS);
+            .columns(TRANSACTION_MAC_COLUMNS)
+            .order_by("!id");
     
         let transactions = sb.fetch_all(db).await?;
 

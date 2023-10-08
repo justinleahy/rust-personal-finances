@@ -91,7 +91,8 @@ impl AccountMac {
     pub async fn list(db: &Db) -> Result<Vec<Account>, model::Error> {
         let sb = sqlb::select()
             .table(ACCOUNT_MAC_TABLE)
-            .columns(ACCOUNT_MAC_COLUMNS);
+            .columns(ACCOUNT_MAC_COLUMNS)
+            .order_by("!id");
         
         let accounts = sb.fetch_all(db).await?;
 

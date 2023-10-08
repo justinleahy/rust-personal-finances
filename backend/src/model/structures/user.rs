@@ -51,7 +51,8 @@ impl UserMac {
     pub async fn list(db: &Db) -> Result<Vec<User>, model::Error> {
         let sb = sqlb::select()
             .table(USER_MAC_TABLE)
-            .columns(USER_MAC_COLUMNS);
+            .columns(USER_MAC_COLUMNS)
+            .order_by("!id");
 
         let users = sb.fetch_all(db).await?;
         
