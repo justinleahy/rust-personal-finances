@@ -10,6 +10,7 @@ pub struct User {
     pub id: Uuid,
     pub username: String,
     pub password_hash: String,
+    pub user_context: String,
     pub first_name: String,
     pub last_name: String,
 }
@@ -19,6 +20,7 @@ struct UserCreate {
     id: Uuid,
     username: Option<String>,
     password_hash: Option<String>,
+    user_context: Option<String>,
     first_name: Option<String>,
     last_name: Option<String>
 }
@@ -27,6 +29,7 @@ struct UserCreate {
 pub struct UserPatch {
     pub username: Option<String>,
     pub password_hash: Option<String>,
+    pub user_context: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>
 }
@@ -38,6 +41,7 @@ impl UserMac {
         let new_user = UserCreate {
             id: Uuid::new_v4(),
             password_hash: data.password_hash,
+            user_context: data.user_context,
             first_name: data.first_name,
             last_name: data.last_name,
             username: data.username

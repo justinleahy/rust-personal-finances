@@ -16,7 +16,7 @@ pub const SQL_RECREATE: &str = "sql/00-recreate-db.sql";
 
 // User MAC
 pub const USER_MAC_TABLE: &'static str = "users";
-pub const USER_MAC_COLUMNS: &'static [&'static str] = &["id", "username", "first_name", "last_name"];
+pub const USER_MAC_COLUMNS: &'static [&'static str] = &["id", "username", "password_hash", "user_context", "first_name", "last_name"];
 
 // Account MAC
 pub const ACCOUNT_MAC_TABLE: &'static str = "accounts";
