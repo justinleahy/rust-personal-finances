@@ -67,6 +67,17 @@ impl AccountMac {
         Ok(account)
     }
 
+    pub async fn delete(db: &Db, id: Uuid) -> Result<Account, model::Error> {
+        let sb = sqlb::delete()
+            .table(Self::TABLE)
+            .returning(Self::COLUMNS)
+            .and_where_eq("id", id);
+
+        let account = sb.fetch_one(db).await?;
+
+        Ok(account)
+    }
+
     pub async fn list(db: &Db) -> Result<Vec<Account>, model::Error> {
         let sb = sqlb::select()
             .table(Self::TABLE)
