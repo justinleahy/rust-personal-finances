@@ -5,6 +5,7 @@ use std::sync::Arc;
 use serde_json::json;
 use warp::Filter;
 use warp::reply::Json;
+use super::with_db;
 
 pub fn transaction_rest_filters(base_path: &'static str, db: Arc<Db>) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
     // /api/transaction
@@ -27,14 +28,6 @@ async fn transaction_list(db: Arc<Db>) -> Result<Json, warp::Rejection> {
     let response = json!({ "data": transactions });
     Ok(warp::reply::json(&response))
 }
-
-// region: Filter Utils
-
-pub fn with_db(db: Arc<Db>) -> impl Filter<Extract = (Arc<Db>,), Error = Infallible> + Clone {
-    warp::any().map(move || db.clone())
-}
-
-// endregion: Filter Utils
 
 #[cfg(test)]
 #[path = "../_tests/web_transaction.rs"]

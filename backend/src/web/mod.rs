@@ -2,6 +2,7 @@ use crate::model::Db;
 use std::path::Path;
 use std::sync::Arc;
 use warp::Filter;
+use std::convert::Infallible;
 
 mod transaction;
 
@@ -25,6 +26,10 @@ pub async fn start_web(web_folder: &str, web_port: u16, db: Arc<Db>) -> Result<(
     warp::serve(routes).run(([127, 0, 0, 1], web_port)).await;
 
     Ok(())
+}
+
+pub fn with_db(db: Arc<Db>) -> impl Filter<Extract = (Arc<Db>,), Error = Infallible> + Clone {
+    warp::any().map(move || db.clone())
 }
 
 #[derive(thiserror::Error, Debug)]
