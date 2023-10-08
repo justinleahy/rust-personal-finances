@@ -96,6 +96,14 @@ async fn transactionmac_update() -> Result<(), Box<dyn std::error::Error>> {
 
     // Action
     let transaction_original = TransactionMac::get(&db, id).await?;
+    let transaction_updated = TransactionMac::update(&db, id, transaction_data_fx).await?;
+
+    // Check
+    assert_eq!(transaction_original.id, transaction_updated.id);
+    assert_eq!(transaction_original.account_id, transaction_updated.account_id);
+    assert_eq!(transaction_original.transaction_date, transaction_updated.transaction_date);
+    assert_eq!(transaction_original.transaction_type, transaction_updated.transaction_type);
+    assert_eq!(transaction_original.comment, transaction_updated.comment);
 
     Ok(())
 }

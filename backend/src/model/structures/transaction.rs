@@ -118,6 +118,7 @@ impl TransactionMac {
         let sb = sqlb::update()
             .table(TRANSACTION_MAC_TABLE)
             .data(data.not_none_fields())
+            .and_where_eq("id", id)
             .returning(TRANSACTION_MAC_COLUMNS);
 
         let transaction = sb.fetch_one(db).await?;
