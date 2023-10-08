@@ -37,17 +37,6 @@ pub struct Account {
 }
 
 #[derive(sqlb::Fields, Clone)]
-struct AccountCreate {
-    id: Uuid,
-    user_id: Option<Uuid>,
-    account_type: Option<AccountTypes>,
-    nickname: Option<String>,
-    interest: Option<f64>,
-    interest_frequency: Option<i32>,
-    interest_frequency_unit: Option<InterestFrequencyUnits>
-}
-
-#[derive(sqlb::Fields, Clone)]
 pub struct AccountPatch {
     pub user_id: Option<Uuid>,
     pub account_type: Option<AccountTypes>,
