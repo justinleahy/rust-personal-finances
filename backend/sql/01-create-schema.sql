@@ -1,6 +1,7 @@
 -- Users table
 CREATE TABLE users (
     id uuid PRIMARY KEY,
+    password_hash text NOT NULL,
     first_name text NOT NULL,
     last_name text NOT NULL,
     username text NOT NULL

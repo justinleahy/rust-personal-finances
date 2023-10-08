@@ -7,6 +7,7 @@ async fn usermac_create() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
     let user_fx = UserPatch {
+        password_hash: Some("123456789".to_string()),
         first_name: Some("John".to_string()),
         last_name: Some("Leahy".to_string()),
         username: Some("johnleahy".to_string())
@@ -16,6 +17,7 @@ async fn usermac_create() -> Result<(), Box<dyn std::error::Error>> {
     let user_created = UserMac::create(&db, user_fx.clone()).await?;
 
     // Check
+    assert_eq!(user_created.password_hash, "123456789");
     assert_eq!(user_created.username, "johnleahy");
     assert_eq!(user_created.first_name, "John");
     assert_eq!(user_created.last_name, "Leahy");
@@ -62,6 +64,7 @@ async fn usermac_update() -> Result<(), Box<dyn std::error::Error>> {
     let id = uuid!("00000000-0000-0000-0000-000000000000");
     let user_data_fx: UserPatch = UserPatch {
         username: Some("jjleahy".to_string()),
+        password_hash: None,
         first_name: None,
         last_name: None
     };
@@ -73,6 +76,7 @@ async fn usermac_update() -> Result<(), Box<dyn std::error::Error>> {
     // Check
     assert_eq!(user_original.id, user_updated.id);
     assert_eq!("jjleahy", user_updated.username);
+    assert_eq!(user_original.password_hash, user_updated.password_hash);
     assert_eq!(user_original.first_name, user_updated.first_name);
     assert_eq!(user_original.last_name, user_updated.last_name);
 

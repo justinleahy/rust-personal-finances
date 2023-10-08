@@ -9,6 +9,7 @@ use crate::model;
 pub struct User {
     pub id: Uuid,
     pub username: String,
+    pub password_hash: String,
     pub first_name: String,
     pub last_name: String,
 }
@@ -17,6 +18,7 @@ pub struct User {
 struct UserCreate {
     id: Uuid,
     username: Option<String>,
+    password_hash: Option<String>,
     first_name: Option<String>,
     last_name: Option<String>
 }
@@ -24,6 +26,7 @@ struct UserCreate {
 #[derive(sqlb::Fields, Clone)]
 pub struct UserPatch {
     pub username: Option<String>,
+    pub password_hash: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>
 }
@@ -34,6 +37,7 @@ impl UserMac {
     pub async fn create(db: &Db, data: UserPatch) -> Result<User, model::Error> {
         let new_user = UserCreate {
             id: Uuid::new_v4(),
+            password_hash: data.password_hash,
             first_name: data.first_name,
             last_name: data.last_name,
             username: data.username
