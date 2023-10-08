@@ -7,6 +7,10 @@ use super::reference::{PG_HOST, PG_ROOT_DB, PG_ROOT_USER, PG_ROOT_PASSWORD, PG_A
 
 pub type Db = Pool<Postgres>;
 
+// SQL Files
+const SQL_DIR: &str = "sql/";
+const SQL_RECREATE: &str = "sql/00-recreate-db.sql";
+
 pub async fn init_db() -> Result<Db, sqlx::Error> {
     // Create the database with PG_ROOT (dev only)
     {
