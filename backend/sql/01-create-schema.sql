@@ -26,9 +26,7 @@ CREATE TABLE accounts (
     user_id uuid REFERENCES users(id),
     account_type account_types NOT NULL,
     nickname text NOT NULL,
-    interest_integer INT NOT NULL,
-    interest_decimal INT8 NOT NULL,
-    interest_exponent INT NOT NULL,
+    interest float NOT NULL,
     interest_frequency INT NOT NULL,
     interest_frequency_unit interest_frequency_units NOT NULL
 );
@@ -54,8 +52,6 @@ CREATE TABLE transactions (
     transaction_date TIMESTAMPTZ not null,
     transaction_type transaction_types not null,
     category transaction_categories not null,
-    transaction_integer INT NOT NULL,
-    transaction_decimal INT8 NOT NULL,
-    transaction_exponent INT NOT NULL,
+    amount float not null,
     comment text
 );

@@ -13,9 +13,7 @@ async fn accountmac_create() -> Result<(), Box<dyn std::error::Error>> {
         user_id: Some(user_id),
         account_type: Some(AccountTypes::Savings),
         nickname: Some("Main Savings".to_string()),
-        interest_integer: Some(4),
-        interest_decimal: Some(16240),
-        interest_exponent: Some(-2),
+        interest: Some(0.041624),
         interest_frequency: Some(1),
         interest_frequency_unit: Some(InterestFrequencyUnits::Day)
     };
@@ -26,9 +24,7 @@ async fn accountmac_create() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(user_id, account_created.user_id);
     assert_eq!(AccountTypes::Savings, account_created.account_type);
     assert_eq!("Main Savings", account_created.nickname);
-    assert_eq!(4, account_created.interest_integer);
-    assert_eq!(16240, account_created.interest_decimal);
-    assert_eq!(-2, account_created.interest_exponent);
+    assert_eq!(0.041624, account_created.interest);
     assert_eq!(1, account_created.interest_frequency);
     assert_eq!(InterestFrequencyUnits::Day, account_created.interest_frequency_unit);
 
@@ -66,9 +62,7 @@ async fn accountmac_get() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(user_id, account.user_id);
     assert_eq!(AccountTypes::Checking, account.account_type);
     assert_eq!("Main Checking", account.nickname);
-    assert_eq!(1, account.interest_integer);
-    assert_eq!(0, account.interest_decimal);
-    assert_eq!(-3, account.interest_exponent);
+    assert_eq!(0.0009995, account.interest);
     assert_eq!(1, account.interest_frequency);
     assert_eq!(InterestFrequencyUnits::Day, account.interest_frequency_unit);
 
@@ -84,9 +78,7 @@ async fn accountmac_update() -> Result<(), Box<dyn std::error::Error>> {
         user_id: None,
         account_type: None,
         nickname: Some("Renamed Checking".to_string()),
-        interest_integer: None,
-        interest_decimal: None,
-        interest_exponent: None,
+        interest: None,
         interest_frequency: None,
         interest_frequency_unit: None
     };
@@ -100,9 +92,7 @@ async fn accountmac_update() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(account_original.user_id, account_updated.user_id);
     assert_eq!(account_original.account_type, account_updated.account_type);
     assert_eq!("Renamed Checking", account_updated.nickname);
-    assert_eq!(account_original.interest_integer, account_updated.interest_integer);
-    assert_eq!(account_original.interest_decimal, account_updated.interest_decimal);
-    assert_eq!(account_original.interest_exponent, account_updated.interest_exponent);
+    assert_eq!(account_original.interest, account_updated.interest);
     assert_eq!(account_original.interest_frequency, account_updated.interest_frequency);
     assert_eq!(account_original.interest_frequency_unit, account_updated.interest_frequency_unit);
 

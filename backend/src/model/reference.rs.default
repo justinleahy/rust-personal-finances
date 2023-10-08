@@ -20,8 +20,8 @@ pub const USER_MAC_COLUMNS: &'static [&'static str] = &["id", "username", "first
 
 // Account MAC
 pub const ACCOUNT_MAC_TABLE: &'static str = "accounts";
-pub const ACCOUNT_MAC_COLUMNS: &'static [&'static str] = &["id", "user_id", "account_type", "nickname", "interest_integer", "interest_decimal", "interest_exponent", "interest_frequency", "interest_frequency_unit"];
+pub const ACCOUNT_MAC_COLUMNS: &'static [&'static str] = &["id", "user_id", "account_type", "nickname", "interest", "interest_frequency", "interest_frequency_unit"];
 
 // Transaction MAC
 pub const TRANSACTION_MAC_TABLE: &'static str = "transactions";
-pub const TRANSACTION_MAC_COLUMNS: &'static [&'static str] = &["id", "account_id", "transaction_date", "transaction_type", "category", "transaction_integer", "transaction_decimal", "transaction_exponent", "comment"];
+pub const TRANSACTION_MAC_COLUMNS: &'static [&'static str] = &["id", "account_id", "transaction_date", "transaction_type", "category", "amount", "comment"];

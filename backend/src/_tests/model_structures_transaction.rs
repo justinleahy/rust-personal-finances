@@ -15,9 +15,7 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
         transaction_date: Some(transaction_date),
         transaction_type: Some(TransactionTypes::Expense),
         category: Some(TransactionCategories::Expense),
-        transaction_integer: Some(1),
-        transaction_decimal: Some(2278),
-        transaction_exponent: Some(2),
+        amount: Some(122.78),
         comment: Some("Test Transaction".to_string())
     };
     
@@ -29,9 +27,7 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(transaction_date.date(), transaction_created.transaction_date.date());
     assert_eq!(TransactionTypes::Expense, transaction_created.transaction_type);
     assert_eq!(TransactionCategories::Expense, transaction_created.category);
-    assert_eq!(1, transaction_created.transaction_integer);
-    assert_eq!(2278, transaction_created.transaction_decimal);
-    assert_eq!(2, transaction_created.transaction_exponent);
+    assert_eq!(122.78, transaction_created.amount);
     assert_eq!("Test Transaction", transaction_created.comment);
     
     Ok(())
@@ -70,9 +66,7 @@ async fn transactionmac_get() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(transaction_date, transaction.transaction_date);
     assert_eq!(TransactionTypes::Transfer, transaction.transaction_type);
     assert_eq!(TransactionCategories::Transfer, transaction.category);
-    assert_eq!(8, transaction.transaction_integer);
-    assert_eq!(9966, transaction.transaction_decimal);
-    assert_eq!(2, transaction.transaction_exponent);
+    assert_eq!(899.66, transaction.amount);
     assert_eq!("Webull Transfer", transaction.comment);
 
     Ok(())
@@ -88,9 +82,7 @@ async fn transactionmac_update() -> Result<(), Box<dyn std::error::Error>> {
         transaction_date: None,
         transaction_type: None,
         category: None,
-        transaction_integer: Some(7),
-        transaction_decimal: None,
-        transaction_exponent: None,
+        amount: Some(700.55),
         comment: None
     };
 
@@ -103,6 +95,7 @@ async fn transactionmac_update() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(transaction_original.account_id, transaction_updated.account_id);
     assert_eq!(transaction_original.transaction_date, transaction_updated.transaction_date);
     assert_eq!(transaction_original.transaction_type, transaction_updated.transaction_type);
+    assert_eq!(700.55, transaction_updated.amount);
     assert_eq!(transaction_original.comment, transaction_updated.comment);
 
     Ok(())

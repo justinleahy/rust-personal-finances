@@ -35,9 +35,7 @@ pub struct Transaction {
     pub transaction_date: OffsetDateTime,
     pub transaction_type: TransactionTypes,
     pub category: TransactionCategories,
-    pub transaction_integer: i32,
-    pub transaction_decimal: i64,
-    pub transaction_exponent: i32,
+    pub amount: f64,
     pub comment: String
 }
 
@@ -48,9 +46,7 @@ struct TransactionCreate {
     transaction_date: Option<OffsetDateTime>,
     transaction_type: Option<TransactionTypes>,
     category: Option<TransactionCategories>,
-    transaction_integer: Option<i32>,
-    transaction_decimal: Option<i64>,
-    transaction_exponent: Option<i32>,
+    amount: Option<f64>,
     comment: Option<String>
 }
 
@@ -60,9 +56,7 @@ pub struct TransactionPatch {
     transaction_date: Option<OffsetDateTime>,
     transaction_type: Option<TransactionTypes>,
     category: Option<TransactionCategories>,
-    transaction_integer: Option<i32>,
-    transaction_decimal: Option<i64>,
-    transaction_exponent: Option<i32>,
+    amount: Option<f64>,
     comment: Option<String>
 }
 
@@ -76,9 +70,7 @@ impl TransactionMac {
             transaction_date: data.transaction_date,
             transaction_type: data.transaction_type,
             category: data.category,
-            transaction_integer: data.transaction_integer,
-            transaction_decimal: data.transaction_decimal,
-            transaction_exponent: data.transaction_exponent,
+            amount: data.amount,
             comment: data.comment
         };
 
