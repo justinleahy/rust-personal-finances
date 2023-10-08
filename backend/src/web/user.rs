@@ -28,3 +28,7 @@ async fn user_list(db: Arc<Db>) -> Result<Json, warp::Rejection> {
     let response = json!({ "data": users });
     Ok(warp::reply::json(&response))
 }
+
+#[cfg(test)]
+#[path = "../_tests/web_user.rs"]
+mod tests;
