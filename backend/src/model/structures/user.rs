@@ -38,18 +38,12 @@ pub struct UserMac;
 
 impl UserMac {
     pub async fn create(db: &Db, data: UserPatch) -> Result<User, model::Error> {
-        let new_user = UserCreate {
-            id: Uuid::new_v4(),
-            password_hash: data.password_hash,
-            user_context: data.user_context,
-            first_name: data.first_name,
-            last_name: data.last_name,
-            username: data.username
-        };
+        let mut fields = data.not_none_fields();
+        fields.push(("id", Uuid::new_v4()).into());
 
         let sb = sqlb::insert()
             .table(USER_MAC_TABLE)
-            .data(new_user.not_none_fields())
+            .data(fields)
             .returning(USER_MAC_COLUMNS);
 
         let user = sb.fetch_one(db).await?;
