@@ -5,6 +5,7 @@ use warp::Filter;
 use std::convert::Infallible;
 
 mod transaction;
+mod account;
 
 pub async fn start_web(web_folder: &str, web_port: u16, db: Arc<Db>) -> Result<(), Error> {
     // Validate web_folder

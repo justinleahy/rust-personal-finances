@@ -9,6 +9,8 @@ pub use db::Db;
 pub use db::init_db;
 pub use structures::Transaction;
 pub use structures::TransactionMac;
+pub use structures::Account;
+pub use structures::AccountMac;
 
 #[derive(ThisError, Debug)]
 pub enum Error {
