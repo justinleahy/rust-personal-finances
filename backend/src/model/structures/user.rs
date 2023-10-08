@@ -1,10 +1,11 @@
 use uuid::{uuid, Uuid};
+use serde_derive::{ Serialize, Deserialize };
 use sqlb::{Fields, HasFields, SqlBuilder};
 use super::super::db::Db;
 use super::super::reference::{USER_MAC_TABLE, USER_MAC_COLUMNS};
 use crate::model;
 
-#[derive(sqlx::FromRow, Debug, Clone)]
+#[derive(sqlx::FromRow, Debug, Clone, Serialize, Deserialize)]
 pub struct User {
     pub id: Uuid,
     pub username: String,
