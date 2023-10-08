@@ -5,6 +5,7 @@ use std::sync::Arc;
 use serde_json::json;
 use warp::Filter;
 use warp::reply::Json;
+use super::json_response;
 use super::with_db;
 
 pub fn user_rest_filters(base_path: &'static str, db: Arc<Db>) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
@@ -24,9 +25,7 @@ pub fn user_rest_filters(base_path: &'static str, db: Arc<Db>) -> impl Filter<Ex
 async fn user_list(db: Arc<Db>) -> Result<Json, warp::Rejection> {
     // TODO: Add proper error handling
     let users = UserMac::list(&db).await.unwrap();
-
-    let response = json!({ "data": users });
-    Ok(warp::reply::json(&response))
+    json_response(users)
 }
 
 #[cfg(test)]

@@ -5,6 +5,7 @@ use std::sync::Arc;
 use serde_json::json;
 use warp::Filter;
 use warp::reply::Json;
+use super::json_response;
 use super::with_db;
 
 pub fn account_rest_filters(base_path: &'static str, db: Arc<Db>) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
@@ -24,6 +25,8 @@ pub fn account_rest_filters(base_path: &'static str, db: Arc<Db>) -> impl Filter
 async fn account_list(db: Arc<Db>) -> Result<Json, warp::Rejection> {
     // TODO: Add proper error handling
     let accounts = AccountMac::list(&db).await.unwrap();
+    json_response(accounts)
+}
 
     let response = json!({ "data": accounts });
     Ok(warp::reply::json(&response))
