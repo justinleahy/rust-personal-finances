@@ -71,21 +71,12 @@ pub struct TransactionMac;
 
 impl TransactionMac {
     pub async fn create(db: &Db, data: TransactionPatch) -> Result<Transaction, model::Error> {
-        let new_transaction = TransactionCreate {
-            id: Uuid::new_v4(),
-            account_id: data.account_id,
-            transaction_date: data.transaction_date,
-            transaction_type: data.transaction_type,
-            category: data.category,
-            amount: data.amount,
-            title: data.title,
-            vendor: data.vendor,
-            comment: data.comment
-        };
+        let mut fields = data.not_none_fields();
+        fields.push(("id", Uuid::new_v4()).into());
 
         let sb = sqlb::insert()
             .table(TRANSACTION_MAC_TABLE)
-            .data(new_transaction.not_none_fields())
+            .data(fields)
             .returning(TRANSACTION_MAC_COLUMNS);
 
         let transaction = sb.fetch_one(db).await?;
