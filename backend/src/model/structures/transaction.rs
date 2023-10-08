@@ -36,7 +36,10 @@ pub struct Transaction {
     pub transaction_type: TransactionTypes,
     pub category: TransactionCategories,
     pub amount: f64,
-    pub comment: String
+    pub title: String,
+    // TODO: Move vendors to their own table and object
+    pub vendor: Option<String>,
+    pub comment: Option<String>
 }
 
 #[derive(sqlb::Fields, Clone)]
@@ -47,6 +50,8 @@ struct TransactionCreate {
     transaction_type: Option<TransactionTypes>,
     category: Option<TransactionCategories>,
     amount: Option<f64>,
+    title: Option<String>,
+    vendor: Option<String>,
     comment: Option<String>
 }
 
@@ -57,6 +62,8 @@ pub struct TransactionPatch {
     transaction_type: Option<TransactionTypes>,
     category: Option<TransactionCategories>,
     amount: Option<f64>,
+    title: Option<String>,
+    vendor: Option<String>,
     comment: Option<String>
 }
 
@@ -71,6 +78,8 @@ impl TransactionMac {
             transaction_type: data.transaction_type,
             category: data.category,
             amount: data.amount,
+            title: data.title,
+            vendor: data.vendor,
             comment: data.comment
         };
 

@@ -55,5 +55,15 @@ CREATE TABLE transactions (
     transaction_type transaction_types not null,
     category transaction_categories not null,
     amount float not null,
+    title text not null,
+    -- Need a better name than vendor
+    vendor text,
     comment text
+);
+
+-- TransactionItem table
+CREATE TABLE transaction_items (
+    id uuid PRIMARY KEY,
+    transaction_id uuid REFERENCES transactions(id),
+    amount float not null
 );

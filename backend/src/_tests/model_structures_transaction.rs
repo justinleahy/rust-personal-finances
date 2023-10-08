@@ -16,6 +16,8 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
         transaction_type: Some(TransactionTypes::Expense),
         category: Some(TransactionCategories::Expense),
         amount: Some(122.78),
+        title: Some("Test Transaction".to_string()),
+        vendor: None,
         comment: Some("Test Transaction".to_string())
     };
     
@@ -28,7 +30,9 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(TransactionTypes::Expense, transaction_created.transaction_type);
     assert_eq!(TransactionCategories::Expense, transaction_created.category);
     assert_eq!(122.78, transaction_created.amount);
-    assert_eq!("Test Transaction", transaction_created.comment);
+    assert_eq!("Test Transaction", transaction_created.title);
+    assert_eq!(None, transaction_created.vendor);
+    assert_eq!(Some("Test Transaction".to_string()), transaction_created.comment);
     
     Ok(())
 }
@@ -67,7 +71,9 @@ async fn transactionmac_get() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(TransactionTypes::Transfer, transaction.transaction_type);
     assert_eq!(TransactionCategories::Transfer, transaction.category);
     assert_eq!(899.66, transaction.amount);
-    assert_eq!("Webull Transfer", transaction.comment);
+    assert_eq!("Transfer", transaction.title);
+    assert_eq!(None, transaction.vendor);
+    assert_eq!("Transfer from Webull", transaction.comment.unwrap());
 
     Ok(())
 }
@@ -83,6 +89,8 @@ async fn transactionmac_update() -> Result<(), Box<dyn std::error::Error>> {
         transaction_type: None,
         category: None,
         amount: Some(700.55),
+        title: None,
+        vendor: None,
         comment: None
     };
 

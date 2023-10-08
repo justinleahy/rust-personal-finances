@@ -24,4 +24,4 @@ pub const ACCOUNT_MAC_COLUMNS: &'static [&'static str] = &["id", "user_id", "acc
 
 // Transaction MAC
 pub const TRANSACTION_MAC_TABLE: &'static str = "transactions";
-pub const TRANSACTION_MAC_COLUMNS: &'static [&'static str] = &["id", "account_id", "transaction_date", "transaction_type", "category", "amount", "comment"];
+pub const TRANSACTION_MAC_COLUMNS: &'static [&'static str] = &["id", "account_id", "transaction_date", "transaction_type", "category", "amount", "title", "vendor", "comment"];
