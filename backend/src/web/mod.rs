@@ -1,8 +1,14 @@
+use thiserror::Error as ThisError;
+
 use crate::model::Db;
+use crate::model;
 use std::path::Path;
 use std::sync::Arc;
 use warp::Filter;
 use std::convert::Infallible;
+use warp::Reply;
+use warp::Rejection;
+use serde_json::json;
 
 mod transaction;
 mod account;
@@ -29,12 +35,57 @@ pub async fn start_web(web_folder: &str, web_port: u16, db: Arc<Db>) -> Result<(
     Ok(())
 }
 
+async fn handle_rejection(rejection_error: Rejection) -> Result<impl Reply, Infallible> {
+    // Print to server side
+    println!("Error - {:?}", rejection_error);
+
+    // TODO - Call log API for capture and store
+
+    // Build user message
+    let user_message = match rejection_error.find::<WebErrorMessage>() {
+        Some(err) => err.error_type.to_string(),
+        None => "Unknown".to_string()
+    };
+
+    let result = json!({ "errorMessage" : user_message });
+    let result = warp::reply::json(&result);
+
+    Ok(warp::reply::with_status(result, warp::http::StatusCode::BAD_REQUEST))
+}
+
 pub fn with_db(db: Arc<Db>) -> impl Filter<Extract = (Arc<Db>,), Error = Infallible> + Clone {
     warp::any().map(move || db.clone())
 }
 
-#[derive(thiserror::Error, Debug)]
+#[derive(ThisError, Debug)]
 pub enum Error {
     #[error("Web server failed to start because web-folder '{0}' not found.")]
     FailStartWebFolderNotFound(String)
 }
+
+// region: Warp Custom Error
+#[derive(Debug)]
+pub struct WebErrorMessage {
+    pub error_type: &'static str,
+    pub message: String
+}
+impl warp::reject::Reject for WebErrorMessage {}
+
+impl WebErrorMessage {
+    pub fn rejection(error_type: &'static str, message: String) -> warp::Rejection {
+        warp::reject::custom(WebErrorMessage{ error_type, message })
+    }
+}
+
+impl From<self::Error> for warp::Rejection {
+    fn from(other: self::Error) -> Self {
+        WebErrorMessage::rejection("web::Error", format!("{}", other))
+    }
+}
+
+impl From<model::Error> for warp::Rejection {
+    fn from(other: model::Error) -> Self {
+        WebErrorMessage::rejection("model::Error", format!("{}", other))
+    }
+}
+// endregion: Warp Custom Error
