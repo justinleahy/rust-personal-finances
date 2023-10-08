@@ -9,6 +9,8 @@ use std::convert::Infallible;
 use warp::Reply;
 use warp::Rejection;
 use serde_json::json;
+use serde::Serialize;
+use warp::reply::Json;
 
 mod transaction;
 mod account;
@@ -56,6 +58,11 @@ async fn handle_rejection(rejection_error: Rejection) -> Result<impl Reply, Infa
 
 pub fn with_db(db: Arc<Db>) -> impl Filter<Extract = (Arc<Db>,), Error = Infallible> + Clone {
     warp::any().map(move || db.clone())
+}
+
+fn json_response<D: Serialize>(data: D) -> Result<Json, warp::Rejection> {
+    let response = json!({ "data": data });
+    Ok(warp::reply::json(&response))
 }
 
 #[derive(ThisError, Debug)]
