@@ -16,16 +16,6 @@ pub struct User {
 }
 
 #[derive(sqlb::Fields, Clone)]
-struct UserCreate {
-    id: Uuid,
-    username: Option<String>,
-    password_hash: Option<String>,
-    user_context: Option<String>,
-    first_name: Option<String>,
-    last_name: Option<String>
-}
-
-#[derive(sqlb::Fields, Clone)]
 pub struct UserPatch {
     pub username: Option<String>,
     pub password_hash: Option<String>,
