@@ -2,7 +2,6 @@ use uuid::{uuid, Uuid};
 use sqlb::{Fields, HasFields, SqlBuilder};
 use serde_derive::{ Serialize, Deserialize };
 use super::super::db::Db;
-use super::super::reference::{ACCOUNT_MAC_TABLE, ACCOUNT_MAC_COLUMNS};
 use crate::model;
 
 #[derive(sqlx::Type, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -49,14 +48,19 @@ pub struct AccountPatch {
 pub struct AccountMac;
 
 impl AccountMac {
+    const TABLE: &'static str = "accounts";
+    const COLUMNS: &'static [&'static str] = &["id", "user_id", "account_type", "nickname", "interest", "interest_frequency", "interest_frequency_unit"];
+}
+
+impl AccountMac {
     pub async fn create(db: &Db, data: AccountPatch) -> Result<Account, model::Error> {
         let mut fields = data.not_none_fields();
         fields.push(("id", Uuid::new_v4()).into());
 
         let sb = sqlb::insert()
-            .table(ACCOUNT_MAC_TABLE)
+            .table(Self::TABLE)
             .data(fields)
-            .returning(ACCOUNT_MAC_COLUMNS);
+            .returning(Self::COLUMNS);
 
         let account = sb.fetch_one(db).await?;
         
@@ -65,8 +69,8 @@ impl AccountMac {
 
     pub async fn list(db: &Db) -> Result<Vec<Account>, model::Error> {
         let sb = sqlb::select()
-            .table(ACCOUNT_MAC_TABLE)
-            .columns(ACCOUNT_MAC_COLUMNS)
+            .table(Self::TABLE)
+            .columns(Self::COLUMNS)
             .order_by("!id");
         
         let accounts = sb.fetch_all(db).await?;
@@ -76,8 +80,8 @@ impl AccountMac {
 
     pub async fn get(db: &Db, id: Uuid) -> Result<Account, model::Error> {
         let sb = sqlb::select()
-            .table(ACCOUNT_MAC_TABLE)
-            .columns(ACCOUNT_MAC_COLUMNS)
+            .table(Self::TABLE)
+            .columns(Self::COLUMNS)
             .and_where_eq("id", id);
 
         let account = sb.fetch_one(db).await?;
@@ -87,10 +91,10 @@ impl AccountMac {
 
     pub async fn update(db: &Db, id: Uuid, data: AccountPatch) -> Result<Account, model::Error> {
         let sb = sqlb::update()
-            .table(ACCOUNT_MAC_TABLE)
+            .table(Self::TABLE)
             .data(data.not_none_fields())
             .and_where_eq("id", id)
-            .returning(ACCOUNT_MAC_COLUMNS);
+            .returning(Self::COLUMNS);
 
         let user = sb.fetch_one(db).await?;
         
