@@ -35,3 +35,7 @@ pub fn with_db(db: Arc<Db>) -> impl Filter<Extract = (Arc<Db>,), Error = Infalli
 }
 
 // endregion: Filter Utils
+
+#[cfg(test)]
+#[path = "../_tests/web_transaction.rs"]
+mod tests;
