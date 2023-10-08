@@ -3,13 +3,14 @@ use serde_json::{Value, from_str, from_value};
 use uuid::uuid;
 use std::str::from_utf8;
 use crate::init_db;
-use crate::model::Account;
+use crate::model::{Account, AccountTypes, InterestFrequencyUnits};
 use crate::web::account::account_rest_filters;
 use crate::web::handle_rejection;
 use serde::Deserialize;
 use std::sync::Arc;
 use warp::hyper::{Response, body::Bytes};
 use warp::Filter;
+use serde_json::json;
 
 #[tokio::test]
 async fn account_list() -> Result<()> {
@@ -36,7 +37,36 @@ async fn account_list() -> Result<()> {
     Ok(())
 }
 
-// region: Web Test Utils
+#[tokio::test]
+async fn account_get() -> Result<()> {
+    // Fixture
+    let db = init_db().await?;
+    let db = Arc::new(db);
+    let account_apis = account_rest_filters("api", db).recover(handle_rejection);
+
+    // Action
+    let resp = warp::test::request()
+        .method("GET")
+        .path("/api/account/00000000-0000-0000-0000-000000000001")
+        .reply(&account_apis)
+        .await;
+    
+    // Check
+    assert_eq!(200, resp.status(), "http status");
+
+    // Extract response data
+    let account: Account = extract_body_data(resp)?;
+
+    assert_eq!(uuid!("00000000-0000-0000-0000-000000000001"), account.id);
+    assert_eq!(uuid!("00000000-0000-0000-0000-000000000000"), account.user_id);
+    assert_eq!(AccountTypes::Checking, account.account_type);
+    assert_eq!("Main Checking", account.nickname);
+    assert_eq!(0.0009995, account.interest);
+    assert_eq!(1, account.interest_frequency);
+    assert_eq!(InterestFrequencyUnits::Day, account.interest_frequency_unit);
+
+    Ok(())
+}
 
 fn extract_body_data<D>(resp: Response<Bytes>) -> Result<D> where for <'de> D: Deserialize<'de> {
     // Parse the body as serde_json::Value
@@ -51,5 +81,3 @@ fn extract_body_data<D>(resp: Response<Bytes>) -> Result<D> where for <'de> D: D
 
     Ok(data)
 }
-
-// endregion: Web Test Utils

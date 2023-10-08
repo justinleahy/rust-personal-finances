@@ -55,8 +55,7 @@ pub fn account_rest_filters(base_path: &'static str, db: Arc<Db>) -> impl Filter
 }
 
 async fn account_list(db: Arc<Db>) -> Result<Json, warp::Rejection> {
-    // TODO: Add proper error handling
-    let accounts = AccountMac::list(&db).await.unwrap();
+    let accounts = AccountMac::list(&db).await?;
     json_response(accounts)
 }
 

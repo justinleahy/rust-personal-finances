@@ -23,7 +23,6 @@ pub fn transaction_rest_filters(base_path: &'static str, db: Arc<Db>) -> impl Fi
 }
 
 async fn transaction_list(db: Arc<Db>) -> Result<Json, warp::Rejection> {
-    // TODO: Add proper error handling
     let transactions = TransactionMac::list(&db).await?;
     json_response(transactions)
 }
