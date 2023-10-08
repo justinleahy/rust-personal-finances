@@ -1,10 +1,11 @@
 use uuid::{uuid, Uuid};
 use sqlb::{Fields, HasFields, SqlBuilder};
+use serde_derive::{ Serialize, Deserialize };
 use super::super::db::Db;
 use super::super::reference::{ACCOUNT_MAC_TABLE, ACCOUNT_MAC_COLUMNS};
 use crate::model;
 
-#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[sqlx(type_name = "account_types")]
 #[sqlx(rename_all = "lowercase")]
 pub enum AccountTypes {
@@ -13,7 +14,7 @@ pub enum AccountTypes {
 }
 sqlb::bindable!(AccountTypes);
 
-#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq)]
+#[derive(sqlx::Type, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[sqlx(type_name = "interest_frequency_units")]
 #[sqlx(rename_all = "lowercase")]
 pub enum InterestFrequencyUnits {
@@ -24,7 +25,7 @@ pub enum InterestFrequencyUnits {
 }
 sqlb::bindable!(InterestFrequencyUnits);
 
-#[derive(sqlx::FromRow, Debug, Clone)]
+#[derive(sqlx::FromRow, Debug, Clone, Serialize, Deserialize)]
 pub struct Account {
     pub id: Uuid,
     pub user_id: Uuid,
