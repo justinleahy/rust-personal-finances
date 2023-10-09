@@ -23,3 +23,7 @@
 - Should transactions store their cost value. With itemized transactions, even if you don't use itemized receipts it should create a single item with the price of the transaction as a whole.
 - Have a sales tax value in the user table as the "default" sales tax. Every item should use that sales tax unless specified otherwise in the UI when filling out the item, or should that also be stored in the item table.
 - Account user types (Admin, User, etc.). Not sure if it's really necessary. Especially for my use case.
+- Some kind of enforcement for structure fields on the create methods for Mac
+- Instead of having a stock API make it so that you can enter the stock's closing price and it will store that. Perhaps a UI with selecting the day and it'll show all currently owned stocks with their corresponding stock price.
+- Create a way of importing CSV of yahoo's finance data.
+- API url should be /account/{id}/transaction/{id}/item/{id}, do not include user uuid
