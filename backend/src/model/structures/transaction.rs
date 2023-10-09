@@ -41,7 +41,7 @@ pub struct Transaction {
     pub comment: Option<String>
 }
 
-#[derive(sqlb::Fields, Clone)]
+#[derive(sqlb::Fields, Clone, Serialize, Deserialize)]
 pub struct TransactionPatch {
     account_id: Option<Uuid>,
     transaction_date: Option<OffsetDateTime>,
