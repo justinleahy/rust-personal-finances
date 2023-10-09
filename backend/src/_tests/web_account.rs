@@ -105,6 +105,49 @@ async fn account_create() -> Result<()> {
     Ok(())
 }
 
+#[tokio::test]
+async fn account_update() -> Result<()> {
+    // Fixture
+    let db = init_db().await?;
+    let db = Arc::new(db);
+    let account_apis = account_rest_filters("api", db).recover(handle_rejection);
+    let body = json!({
+        "nickname": "Checking"
+    });
+    let original_account_resp = warp::test::request()
+        .method("GET")
+        .path("/api/account/00000000-0000-0000-0000-000000000001")
+        .reply(&account_apis)
+        .await;
+
+    assert_eq!(200, original_account_resp.status(), "http status");
+
+    let original_account: Account = extract_body_data(original_account_resp)?;
+
+    // Action
+    let resp = warp::test::request()
+        .method("PATCH")
+        .path("/api/account/00000000-0000-0000-0000-000000000001")
+        .json(&body)
+        .reply(&account_apis)
+        .await;
+
+    // Check
+    assert_eq!(200, resp.status(), "http status");
+
+    let account: Account = extract_body_data(resp)?;
+
+    assert_eq!(original_account.id, account.id);
+    assert_eq!(original_account.user_id, account.user_id);
+    assert_ne!(original_account.nickname, account.nickname);
+    assert_eq!("Checking", account.nickname);
+    assert_eq!(original_account.interest, account.interest);
+    assert_eq!(original_account.interest_frequency, account.interest_frequency);
+    assert_eq!(original_account.interest_frequency_unit, account.interest_frequency_unit);
+
+    Ok(())
+}
+
 fn extract_body_data<D>(resp: Response<Bytes>) -> Result<D> where for <'de> D: Deserialize<'de> {
     // Parse the body as serde_json::Value
     let body = from_utf8(resp.body())?;
