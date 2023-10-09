@@ -37,6 +37,33 @@ async fn user_list() -> Result<()> {
     Ok(())
 }
 
+#[tokio::test]
+async fn user_get() -> Result<()> {
+    let db = init_db().await?;
+    let db = Arc::new(db);
+    let user_apis = user_rest_filters("api", db).recover(handle_rejection);
+
+    // Action
+    let resp = warp::test::request()
+        .method("GET")
+        .path("/api/user/00000000-0000-0000-0000-000000000000")
+        .reply(&user_apis)
+        .await;
+
+    // Check
+    assert_eq!(200, resp.status(), "http status");
+
+    // Extract response data
+    let user: User = extract_body_data(resp)?;
+
+    assert_eq!(uuid!("00000000-0000-0000-0000-000000000000"), user.id);
+    assert_eq!("Justin", user.first_name);
+    assert_eq!("Leahy", user.last_name);
+    assert_eq!("justinleahy", user.username);
+    
+    Ok(())
+}
+
 // region: Web Test Utils
 
 fn extract_body_data<D>(resp: Response<Bytes>) -> Result<D> where for <'de> D: Deserialize<'de> {
