@@ -5,6 +5,7 @@ use crate::model::db::init_db;
 use crate::model::structures::transaction::{TransactionTypes, TransactionCategories, TransactionPatch, TransactionMac};
 use crate::model::structures::account::AccountMac;
 use crate::model::structures::user::UserMac;
+use crate::security::user_context_from_token;
 
 #[tokio::test]
 async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
@@ -13,6 +14,7 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
     let account_id = uuid!("00000000-0000-0000-0000-000000000001");
     let account = AccountMac::get(&db, account_id).await?;
     let user = UserMac::get(&db, account.user_id).await?;
+    let user_context = user_context_from_token(user.user_context.as_str()).await?;
     let transaction_date = OffsetDateTime::now_utc();
     let transaction_fx = TransactionPatch {
         account_id: Some(account_id),
@@ -45,6 +47,9 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
 async fn transactionmac_list() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
+    let user_id = uuid!("00000000-0000-0000-0000-000000000000");
+    let user = UserMac::get(&db, user_id).await?;
+    let user_context = user_context_from_token(user.user_context.as_str()).await?;
 
     // Action
     let transactions = TransactionMac::list(&db).await?;
@@ -59,16 +64,19 @@ async fn transactionmac_list() -> Result<(), Box<dyn std::error::Error>> {
 async fn transactionmac_get() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
-    let id = uuid!("00000000-0000-0000-0000-000000000002");
+    let transaction_id = uuid!("00000000-0000-0000-0000-000000000002");
+    let user_id = uuid!("00000000-0000-0000-0000-000000000000");
+    let user = UserMac::get(&db, user_id).await?;
+    let user_context = user_context_from_token(user.user_context.as_str()).await?;
 
     // Action
-    let transaction = TransactionMac::get(&db, id).await?;
+    let transaction = TransactionMac::get(&db, transaction_id).await?;
 
     // Check
     let account = AccountMac::get(&db, transaction.account_id).await?;
     let transaction_date = datetime!(2023-10-06 00:00:00 +00:00:00);
 
-    assert_eq!(id, transaction.id);
+    assert_eq!(transaction_id, transaction.id);
     assert_eq!(account.id, transaction.account_id);
     assert_eq!(transaction_date, transaction.transaction_date);
     assert_eq!(TransactionTypes::Transfer, transaction.transaction_type);
