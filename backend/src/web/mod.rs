@@ -2,6 +2,9 @@ use thiserror::Error as ThisError;
 
 use crate::model::Db;
 use crate::model;
+use crate::web::account::account_rest_filters;
+use crate::web::transaction::transaction_rest_filters;
+use crate::web::user::user_rest_filters;
 use std::path::Path;
 use std::sync::Arc;
 use warp::Filter;
@@ -22,6 +25,11 @@ pub async fn start_web(web_folder: &str, web_port: u16, db: Arc<Db>) -> Result<(
         return Err(Error::FailStartWebFolderNotFound((web_folder.to_string())));
     }
 
+    // I don't think I should do db.clone() for these but I'm not sure where to proceed
+    let user_apis = user_rest_filters("api", db.clone());
+    let account_apis = account_rest_filters("api", db.clone());
+    let transaction_apis = transaction_rest_filters("api", db.clone());
+
     // Static content
     let content = warp::fs::dir(web_folder.to_string());
     let root_index = warp::get()
@@ -29,11 +37,11 @@ pub async fn start_web(web_folder: &str, web_port: u16, db: Arc<Db>) -> Result<(
         .and(warp::fs::file(format!("{}/index.html", web_folder)));
     let static_site = content.or(root_index);
 
-    // Combine all routes
-    let routes = static_site.recover(handle_rejection);
+    // Combine all routes, ordering matters. Routes with a longer url length should come first.
+    let routes = transaction_apis.or(account_apis).or(user_apis).or(static_site).recover(handle_rejection);
 
     println!("Start 127.0.0.1:{} at {}", web_port, web_folder);
-    warp::serve(routes).run(([127, 0, 0, 1], web_port)).await;
+    warp::serve(routes).run(([192, 168, 1, 186], web_port)).await;
 
     Ok(())
 }
