@@ -23,7 +23,8 @@ pub enum TransactionCategories {
     Income,
     Dividend,
     Transfer,
-    Expense
+    Expense,
+    Interest
 }
 sqlb::bindable!(TransactionCategories);
 
