@@ -64,7 +64,15 @@ async fn user_get() -> Result<()> {
     Ok(())
 }
 
-// region: Web Test Utils
+#[tokio::test]
+async fn user_create() -> Result<()> {
+    Ok(())
+}
+
+#[tokio::test]
+async fn user_update() -> Result<()> {
+    Ok(())
+}
 
 fn extract_body_data<D>(resp: Response<Bytes>) -> Result<D> where for <'de> D: Deserialize<'de> {
     // Parse the body as serde_json::Value
@@ -79,5 +87,3 @@ fn extract_body_data<D>(resp: Response<Bytes>) -> Result<D> where for <'de> D: D
 
     Ok(data)
 }
-
-// endregion: Web Test Utils

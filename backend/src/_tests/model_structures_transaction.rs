@@ -17,7 +17,6 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
     let user_context = user_context_from_token(user.user_context.as_str()).await?;
     let transaction_date = OffsetDateTime::now_utc();
     let transaction_fx = TransactionPatch {
-        account_id: Some(account_id),
         transaction_date: Some(transaction_date),
         transaction_type: Some(TransactionTypes::Expense),
         category: Some(TransactionCategories::Expense),
@@ -28,7 +27,7 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
     };
     
     // Action
-    let transaction_created = TransactionMac::create(&db, transaction_fx.clone()).await?;
+    let transaction_created = TransactionMac::create(&db, account_id, transaction_fx.clone()).await?;
 
     // Check
     assert_eq!(account.id, transaction_created.account_id);
@@ -47,13 +46,11 @@ async fn transactionmac_create() -> Result<(), Box<dyn std::error::Error>> {
 async fn transactionmac_list() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
-    let user_id = uuid!("00000000-0000-0000-0000-000000000000");
-    let user = UserMac::get(&db, user_id).await?;
-    let user_context = user_context_from_token(user.user_context.as_str()).await?;
+    let account_id = uuid!("00000000-0000-0000-0000-000000000001");
 
     // Action
-    let transactions = TransactionMac::list(&db).await?;
-    
+    let transactions = TransactionMac::list(&db, account_id).await?;
+
     // Check
     assert_eq!(2, transactions.len());
 
@@ -65,12 +62,10 @@ async fn transactionmac_get() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
     let transaction_id = uuid!("00000000-0000-0000-0000-000000000002");
-    let user_id = uuid!("00000000-0000-0000-0000-000000000000");
-    let user = UserMac::get(&db, user_id).await?;
-    let user_context = user_context_from_token(user.user_context.as_str()).await?;
+    let account_id = uuid!("00000000-0000-0000-0000-000000000001");
 
     // Action
-    let transaction = TransactionMac::get(&db, transaction_id).await?;
+    let transaction = TransactionMac::get(&db, account_id, transaction_id).await?;
 
     // Check
     let account = AccountMac::get(&db, transaction.account_id).await?;
@@ -94,8 +89,8 @@ async fn transactionmac_update() -> Result<(), Box<dyn std::error::Error>> {
     // Fixture
     let db = init_db().await?;
     let id = uuid!("00000000-0000-0000-0000-000000000002");
+    let account_id = uuid!("00000000-0000-0000-0000-000000000001");
     let transaction_data_fx: TransactionPatch = TransactionPatch {
-        account_id: None,
         transaction_date: None,
         transaction_type: None,
         category: None,
@@ -106,8 +101,8 @@ async fn transactionmac_update() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     // Action
-    let transaction_original = TransactionMac::get(&db, id).await?;
-    let transaction_updated = TransactionMac::update(&db, id, transaction_data_fx).await?;
+    let transaction_original = TransactionMac::get(&db, account_id, id).await?;
+    let transaction_updated = TransactionMac::update(&db, account_id, id, transaction_data_fx).await?;
 
     // Check
     assert_eq!(transaction_original.id, transaction_updated.id);

@@ -16,6 +16,8 @@ Cargo.lock
 # VS Code
 .vscode/
 
+.idea/
+
 # Postgres Database
 database/
 

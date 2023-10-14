@@ -42,9 +42,8 @@ pub struct Transaction {
     pub comment: Option<String>
 }
 
-#[derive(sqlb::Fields, Clone, Serialize, Deserialize)]
+#[derive(Fields, Clone, Serialize, Deserialize)]
 pub struct TransactionPatch {
-    account_id: Option<Uuid>,
     transaction_date: Option<OffsetDateTime>,
     transaction_type: Option<TransactionTypes>,
     category: Option<TransactionCategories>,
@@ -62,9 +61,10 @@ impl TransactionMac {
 }
 
 impl TransactionMac {
-    pub async fn create(db: &Db, data: TransactionPatch) -> Result<Transaction, model::Error> {
+    pub async fn create(db: &Db, account_id: Uuid, data: TransactionPatch) -> Result<Transaction, model::Error> {
         let mut fields = data.not_none_fields();
         fields.push(("id", Uuid::new_v4()).into());
+        fields.push(("account_id", account_id).into());
 
         let sb = sqlb::insert()
             .table(Self::TABLE)
@@ -87,7 +87,7 @@ impl TransactionMac {
         Ok(transaction)
     }
 
-    pub async fn list(db: &Db) -> Result<Vec<Transaction>, model::Error> {
+    pub async fn list(db: &Db, account_id: Uuid) -> Result<Vec<Transaction>, model::Error> {
         let sb = sqlb::select()
             .table(Self::TABLE)
             .columns(Self::COLUMNS)
@@ -98,10 +98,11 @@ impl TransactionMac {
         Ok(transactions)
     }
 
-    pub async fn get(db: &Db, id: Uuid) -> Result<Transaction, model::Error> {
+    pub async fn get(db: &Db, account_id: Uuid, id: Uuid) -> Result<Transaction, model::Error> {
         let sb = sqlb::select()
             .table(Self::TABLE)
             .columns(Self::COLUMNS)
+            .and_where_eq("account_id", account_id)
             .and_where_eq("id", id);
 
         let transaction = sb.fetch_one(db).await?;
@@ -109,11 +110,12 @@ impl TransactionMac {
         Ok(transaction)
     }
 
-    pub async fn update(db: &Db, id: Uuid, data: TransactionPatch) -> Result<Transaction, model::Error> {
+    pub async fn update(db: &Db, account_id: Uuid, transaction_id: Uuid, data: TransactionPatch) -> Result<Transaction, model::Error> {
         let sb = sqlb::update()
             .table(Self::TABLE)
             .data(data.not_none_fields())
-            .and_where_eq("id", id)
+            .and_where_eq("account_id", account_id)
+            .and_where_eq("id", transaction_id)
             .returning(Self::COLUMNS);
 
         let transaction = sb.fetch_one(db).await?;

@@ -59,22 +59,22 @@ pub fn transaction_rest_filters(base_path: &'static str, db: Arc<Db>) -> impl Fi
 }
 
 async fn transaction_list(account_id: Uuid, db: Arc<Db>) -> Result<Json, warp::Rejection> {
-    let transactions = TransactionMac::list(&db).await?;
+    let transactions = TransactionMac::list(&db, account_id).await?;
     json_response(transactions)
 }
 
 async fn transaction_get(account_id: Uuid, db: Arc<Db>, transaction_id: Uuid) -> Result<Json, warp::Rejection> {
-    let transaction = TransactionMac::get(&db, transaction_id).await?;
+    let transaction = TransactionMac::get(&db, account_id, transaction_id).await?;
     json_response(transaction)
 }
 
 async fn transaction_create(account_id: Uuid, db: Arc<Db>, patch: TransactionPatch) -> Result<Json, warp::Rejection> {
-    let transaction = TransactionMac::create(&db, patch).await?;
+    let transaction = TransactionMac::create(&db, account_id, patch).await?;
     json_response(transaction)
 }
 
 async fn transaction_update(account_id: Uuid, db: Arc<Db>, id: Uuid, patch: TransactionPatch) -> Result<Json, warp::Rejection> {
-    let transaction = TransactionMac::update(&db, id, patch).await?;
+    let transaction = TransactionMac::update(&db, account_id, id, patch).await?;
     json_response(transaction)
 }
 

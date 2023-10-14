@@ -14,7 +14,7 @@ pub struct User {
     pub last_name: String,
 }
 
-#[derive(sqlb::Fields, Clone, Serialize, Deserialize)]
+#[derive(Fields, Clone, Serialize, Deserialize)]
 pub struct UserPatch {
     pub username: Option<String>,
     pub password_hash: Option<String>,

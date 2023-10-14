@@ -10,6 +10,7 @@ pub type Db = Pool<Postgres>;
 // SQL Files
 const SQL_DIR: &str = "sql/";
 const SQL_RECREATE: &str = "sql/00-recreate-db.sql";
+const SQL_DEV_SEED: &str = "sql/02-dev-seed.sql";
 
 pub async fn init_db() -> Result<Db, sqlx::Error> {
     // Create the database with PG_ROOT (dev only)
@@ -44,7 +45,7 @@ async fn new_db_pool(host: &str, db: &str, user: &str, password: &str, max_conne
     let con_string = format!("postgres://{}:{}@{}/{}", user, password, host, db);
     PgPoolOptions::new()
         .max_connections(max_connections)
-        .acquire_timeout(Duration::from_millis(500))
+        .acquire_timeout(Duration::from_millis(1000))
         .connect(&con_string)
         .await
 }
