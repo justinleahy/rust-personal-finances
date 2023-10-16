@@ -42,12 +42,14 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Accounts::Uuid).uuid().not_null())
                     .col(ColumnDef::new(Accounts::UserId).integer().not_null())
                     .col(ColumnDef::new(Accounts::AccountType)
-                        .enumeration(AccountTypes::AccountTypes, AccountTypes::iter().skip(1)))
+                        .enumeration(AccountTypes::AccountTypes,
+                                     AccountTypes::iter().skip(1)).not_null())
                     .col(ColumnDef::new(Accounts::Nickname).string().not_null())
                     .col(ColumnDef::new(Accounts::Interest).decimal().not_null())
                     .col(ColumnDef::new(Accounts::InterestFrequency).integer().not_null())
                     .col(ColumnDef::new(Accounts::InterestFrequencyUnit)
-                        .enumeration(InterestFrequencyUnits::InterestFrequencyUnits, InterestFrequencyUnits::iter().skip(1)))
+                        .enumeration(InterestFrequencyUnits::InterestFrequencyUnits,
+                                     InterestFrequencyUnits::iter().skip(1)).not_null())
                     .to_owned()
             ).await?;
 

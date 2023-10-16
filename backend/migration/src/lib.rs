@@ -1,5 +1,6 @@
 pub use sea_orm_migration::prelude::*;
 
+mod entity;
 mod m20231015_180325_create_users_table;
 mod m20231015_183517_create_accounts_table;
 mod m20231015_192911_create_transactions_table;
