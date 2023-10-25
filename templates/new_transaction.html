@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <form id="transaction">
+        <label for="accounts">Account: </label>
+        <select name="accounts" id="accounts">
+            {% for account in accounts %}
+                <option value="{{ account['id'] }}">{{ account['nickname'] }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="date">Date: </label>
+        <input type="date" id="date" name="date" required />
+        <br>
+        <label for="type">Type: </label>
+        <select name="type" id="type">
+            {% for transaction_type in transaction_types %}
+                <option value="{{ transaction_type }}">{{ transaction_type }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="date">Category: </label>
+        <select name="category" id="category">
+            {% for transaction_category in transaction_categories %}
+                <option value="{{ transaction_category }}">{{ transaction_category }}</option>
+            {% endfor %}
+    </select>
+    <br>
+    <label for="title">Title: </label>
+    <input type="text" id="title" name="title" required />
+    <br>
+    <label for="amount">Amount: </label>
+    <input type="text" id="amount" name="amount" required />
+    <br>
+    <label for="vendor">Vendor: </label>
+    <input type="text" id="vendor" name="vendor">
+    <br>
+    <label for="comment">Comment: </label>
+    <input type="text" id="comment" name="comment">
+    <br>
+    <input type="submit" id="submit" method="POST">
+    </form>
+</div>
+<div id="result"></div>
+
+<script src="{{url_for('static', filename='javascript/new_transaction.js')}}"></script>
+{% endblock %}

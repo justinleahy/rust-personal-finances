@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Welcome to Personal Finance {% endblock %}</h1>
+    <h2>Current Net-Worth: {{ "$ {:,.2f}".format(net_worth) }}</h2>
+    {% for account in accounts %}
+    <div class="transactions">
+        <a href="account/{{ account['id'] }}">
+            <h3 class="title">{{ account['nickname'] }}</h3>
+        </a>
+        <span class="badge badge-primary">{{ (account['interest'] * 100) ~ "%" }}</span>
+        <span class="price">$ 100.00</span>
+    </div>
+    <hr>
+    {% endfor %}
+{% endblock %}

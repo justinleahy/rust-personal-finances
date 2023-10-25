@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} {{ account['nickname'] }} Account {% endblock %}</h1>
+<h2>Current Net-Worth: {{ "$ {:,.2f}".format(account_worth) }}</h2>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Amount</th>
+    </tr>
+{% for transaction in transactions %}
+<tr>
+    <a href="{{ transaction['account_id'] }}/transaction/{{ transaction['id'] }}"></a><td>{{ transaction['title'] }}</td></a>
+    <td>{{ transaction['transaction_date'] }}</td>
+    <td>
+        {%- if transaction['amount'] < 0 -%}
+        - $ &ensp; {{ "{:,.2f}".format(transaction['amount']|abs) }}
+        {%- else -%}
+        &ensp;$ &ensp; {{ "{:,.2f}".format(transaction['amount']|abs) }}
+        {%- endif -%}
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

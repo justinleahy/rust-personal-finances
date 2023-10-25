@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <form id="account">
+        <label for="users">User: </label>
+        <select name="users" id="users">
+            {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['username'] }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="type">Account Type: </label>
+        <select name="type" id="type">
+            {% for type in account_types %}
+                <option value="{{ type }}">{{ type }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="nickname">Nickname: </label>
+        <input type="text" id="nickname" name="nickname" required />
+        <br>
+        <label for="interest">Interest: </label>
+        <input type="text" id="interest" name="interest" required />
+        <br>
+        <label for="interest_frequency">Interest Frequency: </label>
+        <input type="text" id="interest_frequency" name="interest_frequency" required />
+        <select name="interest_frequency_unit" id="interest_frequency_unit">
+            {% for interest_frequency_unit in interest_frequency_units %}
+                <option value="{{ interest_frequency_unit }}">{{ interest_frequency_unit }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="submit" id="submit" method="POST">
+    </form>
+</div>
+<div id="result"></div>
+
+<script src="{{url_for('static', filename='javascript/new_account.js')}}"></script>
+{% endblock %}
