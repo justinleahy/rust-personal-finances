@@ -1,7 +1,7 @@
 # Personal Finance
 
 This is an application I'm writing to handle my personal finances. This project will be separated into multiple "phases".
-The backend is written in Rust with a PostgreSQL database.
+The backend is written in Python with a PostgreSQL database.
 
 ## Phase 1
 
