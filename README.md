@@ -30,3 +30,9 @@ Security, there should be an update focused on implementing security across the 
 ## Issues
 
 If there are any mathematical calculation discrepancies please submit an issue because I want this to work 100% of the time.
+
+## Launch Production Server
+
+```sh
+waitress-serve --port=80 --call main:create_app
+```

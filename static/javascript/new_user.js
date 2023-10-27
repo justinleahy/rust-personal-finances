@@ -1,14 +1,13 @@
-const transaction = document.getElementById("transaction");
+const account = document.getElementById("user");
 
-transaction.addEventListener("submit", (e) => {
+account.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const data = {
-        "transaction_date" : transaction.elements["date"].value,
-        "transaction_type" : transaction.elements["type"].value.toLowerCase(),
-        "transaction_category" : transaction.elements["category"].value.toLowerCase(),
-        "amount" : transaction.elements["amount"].value,
-        "title" : transaction.elements["title"].value
+        "username" : account.elements["username"].value,
+        "first_name" : account.elements["first_name"].value,
+        "last_name" : account.elements["last_name"].value,
+        "sales_tax" : account.elements["sales_tax"].value
     };
 
     const requestOptions = {
@@ -17,10 +16,9 @@ transaction.addEventListener("submit", (e) => {
             'Content-Type' : 'application/json'
         },
         body: JSON.stringify(data)
-    }
+    };
 
-    var account_id = transaction.elements["accounts"].value;
-    var url = "http://localhost:5000/api/account/" + account_id + "/transaction"
+    const url = "http://localhost:5000/api/user";
 
     fetch(url, requestOptions)
         .then(response => {

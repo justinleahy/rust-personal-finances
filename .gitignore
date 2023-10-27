@@ -24,3 +24,5 @@ database/
 # Draw.io extra files
 .$personal-finance.drawio.bkp
 .$personal-finance.drawio.dtmp
+
+__pycache__

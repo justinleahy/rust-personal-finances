@@ -22,7 +22,7 @@ account.addEventListener("submit", (e) => {
         body: JSON.stringify(data)
     };
 
-    const url = "http://127.0.0.1:5000/api/account";
+    const url = "http://localhost:5000/api/account";
 
     fetch(url, requestOptions)
         .then(response => {
