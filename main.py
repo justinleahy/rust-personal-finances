@@ -1,5 +1,6 @@
 import psycopg2
 import requests
+import json
 from uuid_extensions import uuid7, uuid7str
 from flask import Flask, request, jsonify, render_template
 from decimal import *
@@ -10,9 +11,18 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    request = requests.get(url = "http://127.0.0.1:5000/api/account/type")
+    account_types = request.json()
+    negative_net_worth_account_types = ["Credit", "Loan"]
+    negative_net_worth_account_type_ids = []
+    for account_type in negative_net_worth_account_types:
+        id = next((x for x in account_types if x['label'] == account_type), None)
+        negative_net_worth_account_type_ids.append(id['id'])
+
     request = requests.get(url = "http://127.0.0.1:5000/api/account")
     accounts = request.json()
 
+    negative_accounts = [account['id'] for account in accounts if account['account_type'] in negative_net_worth_account_type_ids]
     transactions = []
 
     for account in accounts:
@@ -22,7 +32,7 @@ def index():
         account['total'] = account_total
         transactions = account_transactions + transactions
 
-    net_worth = sum([transaction['amount'] for transaction in transactions])
+    net_worth = sum([transaction['amount'] for transaction in transactions if transaction['account_id'] not in negative_accounts]) - sum([transaction['amount'] for transaction in transactions if transaction['account_id'] in negative_accounts])
 
     return render_template('index.html', net_worth=net_worth, accounts=accounts)
 
