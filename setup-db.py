@@ -21,9 +21,9 @@ INSERT_SECURITY_TABLE = """CREATE TABLE IF NOT EXISTS security (
     last_modified_on TIMESTAMPTZ NOT NULL
 );"""
 
-INSERT_ACCOUNTTYPES_ENUM = """CREATE TYPE ACCOUNTTYPES AS ENUM(
-    'checking',
-    'saving'
+INSERT_ACCOUNTTYPES_TABLE = """CREATE TABLE IF NOT EXISTS account_types (
+    id SERIAL PRIMARY KEY,
+    label TEXT NOT NULL
 );"""
 
 INSERT_INTERESTFREQUENCYUNITS_ENUM = """CREATE TYPE INTERESTFREQUENCYUNITS AS ENUM(
@@ -36,7 +36,7 @@ INSERT_INTERESTFREQUENCYUNITS_ENUM = """CREATE TYPE INTERESTFREQUENCYUNITS AS EN
 INSERT_ACCOUNTS_TABLE = """CREATE TABLE IF NOT EXISTS accounts (
     id UUID PRIMARY KEY,
     user_id UUID REFERENCES users(id) NOT NULL,
-    account_type ACCOUNTTYPES NOT NULL,
+    account_type int REFERENCES account_types(id) NOT NULL,
     nickname TEXT NOT NULL,
     interest NUMERIC NOT NULL,
     interest_frequency NUMERIC NOT NULL,
@@ -45,27 +45,22 @@ INSERT_ACCOUNTS_TABLE = """CREATE TABLE IF NOT EXISTS accounts (
     last_modified_on TIMESTAMPTZ NOT NULL
 );"""
 
-INSERT_TRANSACTIONTYPES_ENUM = """CREATE TYPE TRANSACTIONTYPES AS ENUM (
-    'deposit',
-    'withdraw',
-    'expense',
-    'transfer'
+INSERT_TRANSACTIONTYPES_TABLE = """CREATE TABLE IF NOT EXISTS transaction_types (
+    id SERIAL PRIMARY KEY,
+    label TEXT NOT NULL
 );"""
 
-INSERT_TRANSACTIONCATEGORIES_ENUM = """CREATE TYPE TRANSACTIONCATEGORIES AS ENUM (
-    'income',
-    'dividend',
-    'expense',
-    'transfer',
-    'interest'
+INSERT_TRANSACTIONCATEGORIES_TABLE = """CREATE TABLE IF NOT EXISTS transaction_categories (
+    id SERIAL PRIMARY KEY,
+    label TEXT NOT NULL
 );"""
 
 INSERT_TRANSACTIONS_TABLE = """CREATE TABLE IF NOT EXISTS transactions (
     id UUID PRIMARY KEY,
     account_id UUID REFERENCES accounts(id) NOT NULL,
     transaction_date TIMESTAMPTZ NOT NULL,
-    transaction_type TRANSACTIONTYPES NOT NULL,
-    transaction_category TRANSACTIONCATEGORIES NOT NULL,
+    transaction_type int REFERENCES transaction_types(id) NOT NULL,
+    transaction_category int REFERENCES transaction_categories(id) NOT NULL,
     amount NUMERIC NOT NULL,
     title TEXT NOT NULL,
     vendor TEXT,
@@ -78,10 +73,10 @@ connection = psycopg2.connect(host="localhost", dbname="finance_db", user="finan
 cursor = connection.cursor()
 cursor.execute(INSERT_USER_TABLE)
 cursor.execute(INSERT_SECURITY_TABLE)
-cursor.execute(INSERT_ACCOUNTTYPES_ENUM)
+cursor.execute(INSERT_ACCOUNTTYPES_TABLE)
 cursor.execute(INSERT_INTERESTFREQUENCYUNITS_ENUM)
 cursor.execute(INSERT_ACCOUNTS_TABLE)
-cursor.execute(INSERT_TRANSACTIONTYPES_ENUM)
-cursor.execute(INSERT_TRANSACTIONCATEGORIES_ENUM)
+cursor.execute(INSERT_TRANSACTIONTYPES_TABLE)
+cursor.execute(INSERT_TRANSACTIONCATEGORIES_TABLE)
 cursor.execute(INSERT_TRANSACTIONS_TABLE)
 connection.commit()

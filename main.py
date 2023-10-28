@@ -3,6 +3,7 @@ import requests
 from uuid_extensions import uuid7, uuid7str
 from flask import Flask, request, jsonify, render_template
 from decimal import *
+from operator import itemgetter
 
 connection = psycopg2.connect(host="localhost", dbname="finance_db", user="finance_user", password="finance_pwd", port=5432)
 app = Flask(__name__)
@@ -41,20 +42,10 @@ def new_account():
     request = requests.get("http://127.0.0.1:5000/api/user")
     users = request.json()
 
-    account_types_sql = """SELECT unnest(enum_range(NULL::accounttypes))::text"""
+    request = requests.get("http://localhost:5000/api/account/type")
+    account_types = request.json()
+
     interest_frequency_units_sql = """SELECT unnest(enum_range(NULL::interestfrequencyunits))::text"""
-
-    with connection:
-        with connection.cursor() as cursor:
-            cursor.execute(account_types_sql)
-            raw_account_types = cursor.fetchall()
-
-    account_types = []
-
-    for account_type in raw_account_types:
-        account_types.append(account_type[0].capitalize())
-
-    account_types.sort()
 
     with connection:
         with connection.cursor() as cursor:
@@ -70,42 +61,34 @@ def new_account():
 
 @app.route("/user/new")
 def new_user():
-
     return render_template('new_user.html')
 
 @app.route("/transaction/new")
 def new_transaction():
-    request = requests.get(url = "http://127.0.0.1:5000/api/account")
+    request = requests.get(url = "http://localhost:5000/api/account")
     accounts = request.json()
 
-    transaction_types_sql = """SELECT unnest(enum_range(NULL::transactiontypes))::text"""
-    transaction_categories_sql = """SELECT unnest(enum_range(NULL::transactioncategories))::text"""
+    request = requests.get(url = "http://localhost:5000/api/transaction/type")
+    transaction_types = request.json()
+    transaction_types = sorted(transaction_types, key=itemgetter('label'))
 
-    with connection:
-        with connection.cursor() as cursor:
-            cursor.execute(transaction_types_sql)
-            raw_transaction_types = cursor.fetchall()
-
-    transaction_types = []
-
-    for transaction_type in raw_transaction_types:
-        transaction_types.append(transaction_type[0].capitalize())
-
-    transaction_types.sort()
-
-    with connection:
-            with connection.cursor() as cursor:
-                cursor.execute(transaction_categories_sql)
-                raw_transaction_categories = cursor.fetchall()
-
-    transaction_categories = []
-
-    for transaction_category in raw_transaction_categories:
-        transaction_categories.append(transaction_category[0].capitalize())
-
-    transaction_categories.sort()
+    request = requests.get(url = "http://localhost:5000/api/transaction/category")
+    transaction_categories = request.json()
+    transaction_categories = sorted(transaction_categories, key=itemgetter('label'))
 
     return render_template("new_transaction.html", accounts=accounts, transaction_types=transaction_types, transaction_categories=transaction_categories)
+
+@app.route("/account/type/new")
+def new_account_type():
+    return render_template("new_account_type.html")
+
+@app.route("/transaction/type/new")
+def new_transaction_type():
+    return render_template("new_transaction_type.html")
+
+@app.route("/transaction/category/new")
+def new_transaction_category():
+    return render_template("new_transaction_category.html")
 
 def create_app():
     from api.users import users as users_blueprint

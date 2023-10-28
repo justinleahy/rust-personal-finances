@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1>{% block title %} New Transaction {% endblock %}</h1>
 <div>
     <form id="transaction">
         <label for="accounts">Account: </label>
@@ -16,14 +17,14 @@
         <label for="type">Type: </label>
         <select name="type" id="type">
             {% for transaction_type in transaction_types %}
-                <option value="{{ transaction_type }}">{{ transaction_type }}</option>
+                <option value="{{ transaction_type['id'] }}">{{ transaction_type['label'] }}</option>
             {% endfor %}
         </select>
         <br>
         <label for="date">Category: </label>
         <select name="category" id="category">
             {% for transaction_category in transaction_categories %}
-                <option value="{{ transaction_category }}">{{ transaction_category }}</option>
+                <option value="{{ transaction_category['id'] }}">{{ transaction_category['label'] }}</option>
             {% endfor %}
     </select>
     <br>

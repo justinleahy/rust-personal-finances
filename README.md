@@ -31,6 +31,12 @@ Security, there should be an update focused on implementing security across the 
 
 If there are any mathematical calculation discrepancies please submit an issue because I want this to work 100% of the time.
 
+## Packages
+
+```sh
+
+```
+
 ## Launch Production Server
 
 ```sh

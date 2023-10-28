@@ -63,5 +63,4 @@ def list_accounts():
                 }
                 users_data.append(user_data)
 
-
     return jsonify(users_data), 200

@@ -6,6 +6,10 @@ GET_ACCOUNT = """SELECT * FROM accounts WHERE id = (%s)"""
 LIST_ACCOUNTS = """SELECT * FROM accounts"""
 POST_ACCOUNT = """INSERT INTO accounts (id, user_id, account_type, nickname, interest, interest_frequency, interest_frequency_unit, created_on, last_modified_on) VALUES (%s, %s, %s, %s, %s, %s, %s, now(), now()) RETURNING id"""
 
+GET_ACCOUNT_TYPE = """SELECT * from account_types WHERE id = (%s)"""
+LIST_ACCOUNT_TYPES = """SELECT * from account_types"""
+POST_ACCOUNT_TYPE = """INSERT INTO account_types (label) VALUES (%s) RETURNING id"""
+
 accounts = Blueprint("accounts", __name__)
 
 @accounts.route("/api/account/<account_uuid>", methods=["GET"])
@@ -71,3 +75,33 @@ def list_accounts():
 
 
     return jsonify(accounts_data), 200
+
+@accounts.route("/api/account/type", methods=["POST"])
+def post_account_type():
+    data = request.get_json()
+    
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(POST_ACCOUNT_TYPE, (data['label'], ))
+            raw_account_type_id = cursor.fetchone()[0]
+            account_type_id = {
+                "id" : raw_account_type_id
+            }
+
+    return jsonify(account_type_id), 200
+
+@accounts.route("/api/account/type", methods=["GET"])
+def list_account_types():
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(LIST_ACCOUNT_TYPES)
+            raw_account_types_data = cursor.fetchall()
+            account_types_data = []
+            for raw_account_type_data in raw_account_types_data:
+                account_type_data = {
+                    "id" : raw_account_type_data[0],
+                    "label" : raw_account_type_data[1]
+                }
+                account_types_data.append(account_type_data)
+
+    return jsonify(account_types_data), 200

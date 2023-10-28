@@ -3,9 +3,15 @@ from flask import Blueprint, jsonify, request
 from main import connection
 from datetime import datetime
 
-GET_TRANSACTION = """SELECT * from transactions WHERE account_id = (%s) AND id = (%s)"""
-LIST_TRANSACTIONS = """SELECT * from transactions WHERE account_id = (%s)"""
+GET_TRANSACTION = """SELECT * FROM transactions WHERE account_id = (%s) AND id = (%s)"""
+LIST_TRANSACTIONS = """SELECT * FROM transactions WHERE account_id = (%s)"""
 POST_TRANSACTION = """INSERT INTO transactions (id, account_id, transaction_date, transaction_type, transaction_category, amount, title, created_on, last_modified_on) VALUES (%s, %s, %s, %s, %s, %s, %s, now(), now()) RETURNING id"""
+
+LIST_TRANSACTION_TYPES = """SELECT * FROM transaction_types"""
+POST_TRANSACTION_TYPE = """INSERT INTO transaction_types (label) VALUES (%s) RETURNING id"""
+
+LIST_TRANSACTION_CATEGORIES = """SELECT * FROM transaction_categories"""
+POST_TRANSACTION_CATEGORY = """INSERT INTO transaction_categories (label) VALUES (%s) RETURNING id"""
 
 UPDATE_VENDOR = """UPDATE transactions SET vendor = (%s) WHERE id = (%s)"""
 UPDATE_COMMENT = """UPDATE transactions SET comment = (%s) WHERE id = (%s)"""
@@ -88,3 +94,63 @@ def post_transaction(account_uuid):
                 cursor.execute(UPDATE_COMMENT, (data['comment'], raw_transaction_id))
 
     return jsonify(transaction_id), 201
+
+@transactions.route("/api/transaction/type", methods=["POST"])
+def post_transaction_type():
+    data = request.get_json()
+
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(POST_TRANSACTION_TYPE, (data['label'], ))
+            raw_transaction_type_id = cursor.fetchone()[0]
+            transaction_type_id = {
+                "id" : raw_transaction_type_id
+            }
+    
+    return jsonify(transaction_type_id), 200
+
+@transactions.route("/api/transaction/type", methods=["GET"])
+def list_transaction_types():
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(LIST_TRANSACTION_TYPES)
+            raw_transaction_types_data = cursor.fetchall()
+            transaction_types_data = []
+            for raw_transaction_type_data in raw_transaction_types_data:
+                transaction_type_data = {
+                    "id" : raw_transaction_type_data[0],
+                    "label" : raw_transaction_type_data[1]
+                }
+                transaction_types_data.append(transaction_type_data)
+
+    return jsonify(transaction_types_data), 200
+
+@transactions.route("/api/transaction/category", methods=["POST"])
+def post_transaction_category():
+    data = request.get_json()
+
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(POST_TRANSACTION_CATEGORY, (data['label'], ))
+            raw_transaction_category_id = cursor.fetchone()[0]
+            transaction_category_id = {
+                "id" : raw_transaction_category_id
+            }
+    
+    return jsonify(transaction_category_id), 200
+
+@transactions.route("/api/transaction/category", methods=["GET"])
+def list_transaction_categories():
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(LIST_TRANSACTION_CATEGORIES)
+            raw_transaction_categories_data = cursor.fetchall()
+            transaction_categories_data = []
+            for raw_transaction_category_data in raw_transaction_categories_data:
+                transaction_category_data = {
+                    "id" : raw_transaction_category_data[0],
+                    "label" : raw_transaction_category_data[1]
+                }
+                transaction_categories_data.append(transaction_category_data)
+
+    return jsonify(transaction_categories_data), 200

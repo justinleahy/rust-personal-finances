@@ -19,21 +19,25 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="/user/new">New User</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/account/new">New Account</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/transaction/new">New Transaction</a>
-            </li>
+              <div class="dropdown">
+                <button onclick="new_dropdown_toggle()" class="dropbtn">New</button>
+                <div id="new_dropdown" class="dropdown-content">
+                  <a href="/user/new">New User</a>
+                  <a href="/account/new">New Account</a>
+                  <a href="/transaction/new">New Transaction</a>
+                  <a href="/account/type/new">New Account Type</a>
+                  <a href="/transaction/type/new">New Transaction Type</a>
+                  <a href="/transaction/category/new">New Transaction Category</a>
+                </div>
+              </div>
             </ul>
         </div>
     </nav>
     <div class="container">
         {% block content %} {% endblock %}
     </div>
+
+    <script src="{{url_for('static', filename='javascript/base.js')}}"></script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

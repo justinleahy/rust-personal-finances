@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} New Transaction Type {% endblock %}</h1>
+<div>
+    <form id="transaction_type">
+        <label for="label">Label: </label>
+        <input type="text" id="label" name="label" required />
+        <br>
+        <input type="submit" id="submit" method="POST">
+    </form>
+</div>
+<div id="result"></div>
+
+<script src="{{url_for('static', filename='javascript/new_transaction_type.js')}}"></script>
+{% endblock %}
