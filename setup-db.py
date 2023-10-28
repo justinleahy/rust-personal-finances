@@ -69,6 +69,10 @@ INSERT_TRANSACTIONS_TABLE = """CREATE TABLE IF NOT EXISTS transactions (
     last_modified_on TIMESTAMPTZ NOT NULL
 );"""
 
+DEFAULT_ACCOUNT_TYPES = """INSERT INTO account_types (label) VALUES ('Checking'), ('Saving'), ('Credit'), ('Loan'), ('Roth IRA'), ('Simple IRA')"""
+DEFAULT_TRANSACTION_TYPES = """INSERT INTO transaction_types (label) VALUES ('Expense'), ('Deposit'), ('Withdraw'), ('Tax')"""
+DEFAULT_TRANSACTION_CATEGORIES = """INSERT into transaction_categories (label) VALUES ('Expense'), ('Income'), ('Dividend'), ('Interest'), ('Medicare Withholding'), ('Social Security')"""
+
 connection = psycopg2.connect(host="localhost", dbname="finance_db", user="finance_user", password="finance_pwd", port=5432)
 cursor = connection.cursor()
 cursor.execute(INSERT_USER_TABLE)
@@ -79,4 +83,7 @@ cursor.execute(INSERT_ACCOUNTS_TABLE)
 cursor.execute(INSERT_TRANSACTIONTYPES_TABLE)
 cursor.execute(INSERT_TRANSACTIONCATEGORIES_TABLE)
 cursor.execute(INSERT_TRANSACTIONS_TABLE)
+cursor.execute(DEFAULT_ACCOUNT_TYPES)
+cursor.execute(DEFAULT_TRANSACTION_TYPES)
+cursor.execute(DEFAULT_TRANSACTION_CATEGORIES)
 connection.commit()
