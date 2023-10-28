@@ -20,7 +20,7 @@ transaction.addEventListener("submit", (e) => {
     }
 
     var account_id = transaction.elements["accounts"].value;
-    var url = "http://localhost:5000/api/account/" + account_id + "/transaction"
+    var url = "http://" + host + ":" + port + "/api/account/" + account_id + "/transaction"
 
     fetch(url, requestOptions)
         .then(response => {

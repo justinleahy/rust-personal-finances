@@ -15,7 +15,7 @@ transaction_type.addEventListener("submit", (e) => {
         body: JSON.stringify(data)
     };
 
-    const url = "http://localhost:5000/api/transaction/type";
+    const url = "http://" + host + ":" + port + "/api/transaction/type";
 
     fetch(url, requestOptions)
         .then(response => {

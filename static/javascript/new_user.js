@@ -18,7 +18,7 @@ account.addEventListener("submit", (e) => {
         body: JSON.stringify(data)
     };
 
-    const url = "http://localhost:5000/api/user";
+    const url = "http://" + host + ":" + port + "/api/user";
 
     fetch(url, requestOptions)
         .then(response => {
