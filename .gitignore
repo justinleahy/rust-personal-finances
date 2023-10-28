@@ -26,3 +26,5 @@ database/
 .$personal-finance.drawio.dtmp
 
 __pycache__
+
+static/javascript/base.js
