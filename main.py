@@ -45,7 +45,7 @@ def account_overview(account_uuid):
     account = request.json()
     request = requests.get(url = "http://127.0.0.1:5000/api/account/" + account_uuid + "/transaction")
     transactions = request.json()
-    transactions = sorted(transactions, key=itemgetter('transaction_date'))
+    transactions = sorted(transactions, key=itemgetter('transaction_date'), reverse=True)
 
     account_worth = sum([transaction['amount'] for transaction in transactions])
 
