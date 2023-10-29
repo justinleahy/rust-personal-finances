@@ -55,6 +55,11 @@ INSERT_TRANSACTIONCATEGORIES_TABLE = """CREATE TABLE IF NOT EXISTS transaction_c
     label TEXT NOT NULL
 );"""
 
+INSERT_VENDOR_TABLE = """CREATE TABLE IF NOT EXISTS vendors (
+    id SERIAL PRIMARY KEY,
+    label TEXT NOT NULL
+);"""
+
 INSERT_TRANSACTIONS_TABLE = """CREATE TABLE IF NOT EXISTS transactions (
     id UUID PRIMARY KEY,
     account_id UUID REFERENCES accounts(id) NOT NULL,
@@ -63,7 +68,7 @@ INSERT_TRANSACTIONS_TABLE = """CREATE TABLE IF NOT EXISTS transactions (
     transaction_category int REFERENCES transaction_categories(id) NOT NULL,
     amount NUMERIC NOT NULL,
     title TEXT NOT NULL,
-    vendor TEXT,
+    vendor int REFERENCES vendors(id),
     comment TEXT,
     created_on TIMESTAMPTZ NOT NULL,
     last_modified_on TIMESTAMPTZ NOT NULL
@@ -82,6 +87,7 @@ cursor.execute(INSERT_INTERESTFREQUENCYUNITS_ENUM)
 cursor.execute(INSERT_ACCOUNTS_TABLE)
 cursor.execute(INSERT_TRANSACTIONTYPES_TABLE)
 cursor.execute(INSERT_TRANSACTIONCATEGORIES_TABLE)
+cursor.execute(INSERT_VENDOR_TABLE)
 cursor.execute(INSERT_TRANSACTIONS_TABLE)
 cursor.execute(DEFAULT_ACCOUNT_TYPES)
 cursor.execute(DEFAULT_TRANSACTION_TYPES)

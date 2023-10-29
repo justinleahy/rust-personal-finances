@@ -26,6 +26,9 @@ def index():
     transactions = []
 
     for account in accounts:
+        account_type = next((x for x in account_types if x['id'] == account['account_type']), None)
+        account['account_type'] = account_type['label']
+
         request = requests.get(url = "http://127.0.0.1:5000/api/account/" + account['id'] + "/transaction")
         account_transactions = request.json()
         account_total = sum([transaction['amount'] for transaction in account_transactions])
@@ -91,8 +94,12 @@ def new_transaction():
     request = requests.get(url = "http://localhost:5000/api/transaction/category")
     transaction_categories = request.json()
     transaction_categories = sorted(transaction_categories, key=itemgetter('label'))
+    
+    request = requests.get(url = "http://localhost:5000/api/transaction/vendor")
+    vendors = request.json()
+    vendors = sorted(vendors, key=itemgetter('label'))
 
-    return render_template("new_transaction.html", accounts=accounts, transaction_types=transaction_types, transaction_categories=transaction_categories)
+    return render_template("new_transaction.html", accounts=accounts, transaction_types=transaction_types, transaction_categories=transaction_categories, vendors=vendors)
 
 @app.route("/account/type/new")
 def new_account_type():
@@ -105,6 +112,10 @@ def new_transaction_type():
 @app.route("/transaction/category/new")
 def new_transaction_category():
     return render_template("new_transaction_category.html")
+
+@app.route("/transaction/vendor/new")
+def new_vendor():
+    return render_template("new_vendor.html")
 
 def create_app():
     from api.users import users as users_blueprint

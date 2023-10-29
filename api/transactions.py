@@ -13,6 +13,9 @@ POST_TRANSACTION_TYPE = """INSERT INTO transaction_types (label) VALUES (%s) RET
 LIST_TRANSACTION_CATEGORIES = """SELECT * FROM transaction_categories"""
 POST_TRANSACTION_CATEGORY = """INSERT INTO transaction_categories (label) VALUES (%s) RETURNING id"""
 
+LIST_VENDORS = """SELECT * FROM vendors"""
+POST_VENDOR = """INSERT INTO vendors (label) VALUES (%s) RETURNING id"""
+
 UPDATE_VENDOR = """UPDATE transactions SET vendor = (%s) WHERE id = (%s)"""
 UPDATE_COMMENT = """UPDATE transactions SET comment = (%s) WHERE id = (%s)"""
 
@@ -154,3 +157,33 @@ def list_transaction_categories():
                 transaction_categories_data.append(transaction_category_data)
 
     return jsonify(transaction_categories_data), 200
+
+@transactions.route("/api/transaction/vendor", methods=["POST"])
+def post_vendor():
+    data = request.get_json()
+
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(POST_VENDOR, (data['label'], ))
+            raw_vendor_id = cursor.fetchone()[0]
+            vendor_id = {
+                "id" : raw_vendor_id
+            }
+
+    return jsonify(vendor_id), 200
+
+@transactions.route("/api/transaction/vendor", methods=["GET"])
+def list_vendors():
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(LIST_VENDORS)
+            raw_vendors_data = cursor.fetchall()
+            vendors_data = []
+            for raw_vendor_data in raw_vendors_data:
+                vendor_data = {
+                    "id" : raw_vendor_data[0],
+                    "label" : raw_vendor_data[1]
+                }
+                vendors_data.append(vendor_data)
+
+    return jsonify(vendors_data), 200

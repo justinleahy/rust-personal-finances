@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} New Vendor {% endblock %}</h1>
+<div>
+    <form id="vendor">
+        <label for="label">Label: </label>
+        <input type="text" id="label" name="label" required />
+        <br>
+        <input type="submit" id="submit" method="POST">
+    </form>
+</div>
+<div id="result"></div>
+
+<script src="{{url_for('static', filename='javascript/new_vendor.js')}}"></script>
+{% endblock %}

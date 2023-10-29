@@ -38,8 +38,6 @@ def get_account(account_uuid):
 @accounts.route("/api/account", methods = ["POST"])
 def post_account():
     data = request.get_json()
-    
-    print(data)
 
     with connection:
         with connection.cursor() as cursor:
