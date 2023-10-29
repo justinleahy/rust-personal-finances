@@ -7,7 +7,7 @@
         <label for="accounts">Account: </label>
         <select name="accounts" id="accounts">
             {% for account in accounts %}
-                <option value="{{ account['id'] }}">{{ account['nickname'] }}</option>
+                <option value="{{ account['id'] }}">{{ account['nickname'] ~ " [" ~ account['account_type'] ~ "]" }}</option>
             {% endfor %}
         </select>
         <br>

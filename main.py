@@ -16,8 +16,8 @@ def index():
     negative_net_worth_account_types = ["Credit", "Loan"]
     negative_net_worth_account_type_ids = []
     for account_type in negative_net_worth_account_types:
-        id = next((x for x in account_types if x['label'] == account_type), None)
-        negative_net_worth_account_type_ids.append(id['id'])
+        target = next((x for x in account_types if x['label'] == account_type), None)
+        negative_net_worth_account_type_ids.append(target['id'])
 
     request = requests.get(url = "http://127.0.0.1:5000/api/account")
     accounts = request.json()
@@ -75,8 +75,14 @@ def new_user():
 
 @app.route("/transaction/new")
 def new_transaction():
+    request = requests.get(url = "http://localhost:5000/api/account/type")
+    account_types = request.json()
+
     request = requests.get(url = "http://localhost:5000/api/account")
     accounts = request.json()
+    for account in accounts:
+        account_type = next((x for x in account_types if x['id'] == account['account_type']), None)
+        account['account_type'] = account_type['label']
 
     request = requests.get(url = "http://localhost:5000/api/transaction/type")
     transaction_types = request.json()
