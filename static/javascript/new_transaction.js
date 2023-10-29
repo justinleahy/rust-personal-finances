@@ -11,6 +11,14 @@ transaction.addEventListener("submit", (e) => {
         "title" : transaction.elements["title"].value
     };
 
+    if(transaction.elements["vendor"].value != "") {
+        data["vendor"] = transaction.elements["vendor"].value;
+    }
+
+    if(transaction.elements["comment"].value != "") {
+        data["comment"] = transaction.elements["comment"].value;
+    }
+
     const requestOptions = {
         method: 'POST',
         headers: {

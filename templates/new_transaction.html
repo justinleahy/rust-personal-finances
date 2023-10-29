@@ -36,6 +36,7 @@
         <br>
         <label for="vendor">Vendor: </label>
         <select name="vendor" id="vendor">
+                <option value=""></option>
             {% for vendor in vendors %}
                 <option value="{{ vendor['id'] }}">{{ vendor['label'] }}</option>
             {% endfor %}
