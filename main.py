@@ -45,10 +45,43 @@ def account_overview(account_uuid):
     account = request.json()
     request = requests.get(url = "http://127.0.0.1:5000/api/account/" + account_uuid + "/transaction")
     transactions = request.json()
+    transactions = sorted(transactions, key=itemgetter('transaction_date'))
 
     account_worth = sum([transaction['amount'] for transaction in transactions])
 
     return render_template('account_overview.html', account=account, account_worth=account_worth, transactions=transactions)
+
+@app.route("/account/<account_uuid>/transaction/<transaction_uuid>")
+def transaction_overview(account_uuid, transaction_uuid):
+    return render_template("transaction_overview.html")
+
+@app.route("/account/<account_uuid>/transaction/<transaction_uuid>/edit")
+def edit_transaction(account_uuid, transaction_uuid):
+    request = requests.get(url = "http://localhost:5000/api/account/" + account_uuid + "/transaction/" + transaction_uuid)
+    transaction = request.json()
+
+    request = requests.get(url = "http://localhost:5000/api/account/type")
+    account_types = request.json()
+
+    request = requests.get(url = "http://localhost:5000/api/account")
+    accounts = request.json()
+    for account in accounts:
+        account_type = next((x for x in account_types if x['id'] == account['account_type']), None)
+        account['account_type'] = account_type['label']
+
+    request = requests.get(url = "http://localhost:5000/api/transaction/type")
+    transaction_types = request.json()
+    transaction_types = sorted(transaction_types, key=itemgetter('label'))
+
+    request = requests.get(url = "http://localhost:5000/api/transaction/category")
+    transaction_categories = request.json()
+    transaction_categories = sorted(transaction_categories, key=itemgetter('label'))
+    
+    request = requests.get(url = "http://localhost:5000/api/transaction/vendor")
+    vendors = request.json()
+    vendors = sorted(vendors, key=itemgetter('label'))
+
+    return render_template("edit_transaction.html", transaction=transaction, accounts=accounts, transaction_types=transaction_types, transaction_categories=transaction_categories, vendors=vendors)
 
 @app.route("/account/new")
 def new_account():

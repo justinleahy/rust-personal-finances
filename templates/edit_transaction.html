@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Edit Transaction {% endblock %}</h1>
+<div>
+    <form id="transaction">
+        Id: <span id="id">{{ transaction['id'] }}</span>
+        <br>
+        <label for="accounts">Account: </label>
+        <select name="accounts" id="accounts">
+            {% for account in accounts %}
+                {% if account['id'] == transaction['account_id'] %}
+                <option value="{{ account['id'] }}" selected>{{ account['nickname'] ~ " [" ~ account['account_type'] ~ "]" }}</option>
+                {% else %}
+                <option value="{{ account['id'] }}">{{ account['nickname'] ~ " [" ~ account['account_type'] ~ "]" }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br>
+        <label for="date">Date: </label>
+        <input type="date" id="date" name="date" value="{{ transaction['transaction_date'] }}" required />
+        <br>
+        <label for="type">Type: </label>
+        <select name="type" id="type">
+            {% for transaction_type in transaction_types %}
+                {% if transaction_type['id'] == transaction['transaction_type'] %}
+                <option value="{{ transaction_type['id'] }}" selected>{{ transaction_type['label'] }}</option>
+                {% else %}
+                <option value="{{ transaction_type['id'] }}">{{ transaction_type['label'] }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br>
+        <label for="date">Category: </label>
+        <select name="category" id="category">
+            {% for transaction_category in transaction_categories %}
+                {% if transaction_category['id'] == transaction['transaction_category'] %}
+                <option value="{{ transaction_category['id'] }}" selected>{{ transaction_category['label'] }}</option>
+                {% else %}
+                <option value="{{ transaction_category['id'] }}">{{ transaction_category['label'] }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br>
+        <label for="title">Title: </label>
+        <input type="text" id="title" name="title" value="{{ transaction['title'] }}" required />
+        <br>
+        <label for="amount">Amount: </label>
+        <input type="text" id="amount" name="amount" value="{{ transaction['amount'] }}" required />
+        <br>
+        <label for="vendor">Vendor: </label>
+        <select name="vendor" id="vendor">
+                <option value=""></option>
+            {% for vendor in vendors %}
+                {% if vendor['id'] == transaction['vendor'] %}
+                <option value="{{ vendor['id'] }}" selected>{{ vendor['label'] }}</option>
+                {% else %}
+                <option value="{{ vendor['id'] }}">{{ vendor['label'] }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br>
+        <label for="comment">Comment: </label>
+        {% if transaction['comment'] != None %}
+        <input type="text" id="comment" name="comment" value="{{ transaction['comment'] }}">
+        {% else %}
+        <input type="text" id="comment" name="comment">
+        {% endif %}
+        <br>
+        Created on: <span>{{ transaction['created_on'] }}</span>
+        <br>
+        Last Modified on: <span>{{ transaction['last_modified_on'] }}</span>
+        <br>
+        <input type="submit" id="submit" method="POST">
+        </form>
+</div>
+<div id="result"></div>
+
+<script src="{{url_for('static', filename='javascript/edit_transaction.js')}}"></script>
+{% endblock %}

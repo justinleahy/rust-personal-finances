@@ -9,7 +9,7 @@
             <h3 class="title">{{ account['nickname'] }}</h3>
         </a>
         <span class="badge badge-primary">{{ account['account_type'] }}</span>
-        <span class="badge badge-secondary">{{ (account['interest'] * 100) ~ "%" }}</span>
+        <span class="badge badge-secondary">{{ "{:,.2f}".format(account['interest'] * 100) ~ "%" }}</span>
         <span class="price">$ {{ "{:,.2f}".format(account['total']) }}</span>
     </div>
     <hr>

@@ -6,6 +6,7 @@ from datetime import datetime
 GET_TRANSACTION = """SELECT * FROM transactions WHERE account_id = (%s) AND id = (%s)"""
 LIST_TRANSACTIONS = """SELECT * FROM transactions WHERE account_id = (%s)"""
 POST_TRANSACTION = """INSERT INTO transactions (id, account_id, transaction_date, transaction_type, transaction_category, amount, title, created_on, last_modified_on) VALUES (%s, %s, %s, %s, %s, %s, %s, now(), now()) RETURNING id"""
+UPDATE_TRANSACTION = """UPDATE transactions SET account_id = (%s), transaction_date = (%s), transaction_type = (%s), transaction_category = (%s), amount = (%s), title = (%s), last_modified_on = now() WHERE id = (%s) RETURNING id"""
 
 LIST_TRANSACTION_TYPES = """SELECT * FROM transaction_types"""
 POST_TRANSACTION_TYPE = """INSERT INTO transaction_types (label) VALUES (%s) RETURNING id"""
@@ -25,18 +26,13 @@ transactions = Blueprint("transactions", __name__)
 def get_transaction(account_uuid, transaction_uuid):
     with connection:
         with connection.cursor() as cursor:
-            from accounts import GET_ACCOUNT
-            cursor.execute(GET_ACCOUNT, (account_uuid,))
-            raw_account_data = cursor.fetchone()
-            print(raw_account_data)
-            account_id = raw_account_data[0]
-            cursor.execute(GET_TRANSACTION, (account_id, transaction_uuid,))
+            cursor.execute(GET_TRANSACTION, (account_uuid, transaction_uuid,))
             raw_transaction_data = cursor.fetchone()
             if raw_transaction_data:
                 transaction_data = {
                     "id" : raw_transaction_data[0],
                     "account_id" : raw_transaction_data[1],
-                    "transaction_date" : datetime.strptime(raw_transaction_data[2], "%y-%m-%d").date(),
+                    "transaction_date" : raw_transaction_data[2].strftime("%Y-%m-%d"),
                     "transaction_type" : raw_transaction_data[3],
                     "transaction_category" : raw_transaction_data[4],
                     "amount" : float(raw_transaction_data[5]),
@@ -97,6 +93,25 @@ def post_transaction(account_uuid):
                 cursor.execute(UPDATE_COMMENT, (data['comment'], raw_transaction_id))
 
     return jsonify(transaction_id), 201
+
+@transactions.route("/api/account/<account_uuid>/transaction/<transaction_uuid>", methods=["PATCH"])
+def update_transcation(account_uuid, transaction_uuid):
+    data = request.get_json()
+
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(UPDATE_TRANSACTION, (data['account_id'], data['transaction_date'], data['transaction_type'], data['transaction_category'], data['amount'], data['title'], transaction_uuid))
+            raw_transaction_id = cursor.fetchone()[0]
+            transaction_id = {
+                "id" : raw_transaction_id
+            }
+            if "vendor" in data:
+                cursor.execute(UPDATE_VENDOR, (data['vendor'], transaction_uuid))
+
+            if "comment" in data:
+                cursor.execute(UPDATE_COMMENT, (data['comment'], transaction_uuid))
+
+    return jsonify(transaction_id), 200
 
 @transactions.route("/api/transaction/type", methods=["POST"])
 def post_transaction_type():

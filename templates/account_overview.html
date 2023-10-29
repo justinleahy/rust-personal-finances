@@ -8,10 +8,11 @@
         <th>Title</th>
         <th>Date</th>
         <th>Amount</th>
+        <th>Options</th>
     </tr>
 {% for transaction in transactions %}
 <tr>
-    <a href="{{ transaction['account_id'] }}/transaction/{{ transaction['id'] }}"></a><td>{{ transaction['title'] }}</td></a>
+    <td><a href="{{ transaction['account_id'] }}/transaction/{{ transaction['id'] }}">{{ transaction['title'] }}</a></td>
     <td>{{ transaction['transaction_date'] }}</td>
     <td>
         {%- if transaction['amount'] < 0 -%}
@@ -20,6 +21,7 @@
         &ensp;$ &ensp; {{ "{:,.2f}".format(transaction['amount']|abs) }}
         {%- endif -%}
     </td>
+    <td><a href="/account/{{ transaction['account_id'] }}/transaction/{{ transaction['id'] }}/edit">Edit</a> <a href="/account/{{ transaction['account_id'] }}/transaction/{{ transaction['id'] }}/delete">Delete</a></td>
 </tr>
 {% endfor %}
 </table>
